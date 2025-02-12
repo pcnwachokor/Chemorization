@@ -9,7 +9,8 @@ export default function TabOneScreen() {
   getAuth().onAuthStateChanged((user) => {
     if (!user) router.replace('/');
   });
-
+  // If user is not signed in, redirect to login screen
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Out</Text>
