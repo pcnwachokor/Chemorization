@@ -1,14 +1,22 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import { auth } from '@/FirebaseConfig';
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { getAuth } from 'firebase/auth';
+import { router } from 'expo-router';
 
 export default function TabOneScreen() {
+
+  getAuth().onAuthStateChanged((user) => {
+    if (!user) router.replace('/');
+  });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Text style={styles.title}>Sign Out</Text>
+      <TouchableOpacity onPress={() => auth.signOut()}>
+        <Text>Sign Out</Text>    
+        {/* Signout button */}
+      </TouchableOpacity>
     </View>
   );
 }
