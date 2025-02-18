@@ -1,4 +1,4 @@
-// index.tsx
+// this is the landing page
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
@@ -12,7 +12,7 @@ const Container = styled(SafeAreaView)`
 `;
 
 const Title = styled.Text`
-  font-size: 32px;
+  font-size: 26px;
   font-weight: bold;
   color: ${(props: { theme: { text: any; }; }) => props.theme.text};
   margin-bottom: 20px;
@@ -32,10 +32,10 @@ const ButtonText = styled.Text`
 
 const Index = () => {
   return (
-    <Container>
-      <Title>Welcome to My App</Title>
+    <Container style={{ backgroundColor: 'darkgreen' }}>
+      <Title style= {{ color: 'white' }}>Welcome to Chemorization!</Title>
       <Button onPress={() => router.push('/(auth)/signin')}>
-        <ButtonText>Sign In</ButtonText>
+        <ButtonText style= {{ color: 'white' }}>Sign In</ButtonText>
       </Button>
     </Container>
   );

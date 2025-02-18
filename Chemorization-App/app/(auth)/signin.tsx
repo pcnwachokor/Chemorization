@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 
 const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${(props) => props.theme.background};
+  background-color: ${(props: { theme: { background: any; }; }) => props.theme.background};
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -17,7 +17,7 @@ const Container = styled(SafeAreaView)`
 const Title = styled.Text`
   font-size: 28px;
   font-weight: bold;
-  color: ${(props) => props.theme.text};
+  color: ${(props: { theme: { text: any; }; }) => props.theme.text};
   margin-bottom: 20px;
 `;
 
@@ -34,7 +34,7 @@ const Input = styled.TextInput`
 
 const Button = styled.TouchableOpacity`
   width: 100%;
-  background-color: ${(props) => props.theme.primary};
+  background-color: ${(props: { theme: { primary: any; }; }) => props.theme.primary};
   padding: 12px;
   border-radius: 8px;
   align-items: center;
@@ -88,9 +88,9 @@ const SignInScreen = () => {
         secureTextEntry
       />
       <Button onPress={signIn}>
-        <ButtonText>Login</ButtonText>
+        <ButtonText style= {{ color: 'black' }}>Login</ButtonText>
       </Button>
-      <Button onPress={signUp} style={{ backgroundColor: '#444' }}>
+      <Button onPress={signUp} style={{ backgroundColor: 'darkgreen' }}>
         <ButtonText>Sign Up</ButtonText>
       </Button>
     </Container>
