@@ -1,48 +1,44 @@
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import { auth } from '../FirebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+// index.tsx
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import styled from 'styled-components/native';
 import { router } from 'expo-router';
-//import { SafeAreaView } from 'react-native-safe-area-context';
 
-const index = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${(props: { theme: { background: any; }; }) => props.theme.background};
+  align-items: center;
+  justify-content: center;
+`;
 
-    const signIn = async () => {
-        try{
-            const user = await signInWithEmailAndPassword(auth, email, password)
-            if (user) router.replace('/(tabs)'); //routes user to tabs screen
-        } catch (error: any){
-            console.log(error)
-            alert('Sign in failed: ' + error.message);
-        }
-    }
-  
-    const signUp = async () => {
-        try{
-            const user = await createUserWithEmailAndPassword(auth, email, password)
-            if (user) router.replace('/(tabs)');
-        } catch (error: any){
-            console.log(error)
-            alert('Sign in failed: ' + error.message);
-        }
-    }
-    
+const Title = styled.Text`
+  font-size: 32px;
+  font-weight: bold;
+  color: ${(props: { theme: { text: any; }; }) => props.theme.text};
+  margin-bottom: 20px;
+`;
 
-    return (
-        <SafeAreaView>
-            <Text>Login</Text>
-            <TextInput placeholder-="email" value={email} onChangeText={setEmail}/>
-            <TextInput placeholder-="password" value={password} onChangeText={setPassword} secureTextEntry/>
-            <TouchableOpacity onPress={signIn}>
-                <Text>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={signUp}>
-                <Text>Sign Up</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
-    )
-}
+const Button = styled.TouchableOpacity`
+  background-color: ${(props: { theme: { primary: any; }; }) => props.theme.primary};
+  padding: 12px 20px;
+  border-radius: 8px;
+`;
 
-export default index
+const ButtonText = styled.Text`
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const Index = () => {
+  return (
+    <Container>
+      <Title>Welcome to My App</Title>
+      <Button onPress={() => router.push('/(auth)/signin')}>
+        <ButtonText>Sign In</ButtonText>
+      </Button>
+    </Container>
+  );
+};
+
+export default Index;
