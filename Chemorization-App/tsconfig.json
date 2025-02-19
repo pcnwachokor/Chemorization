@@ -3,7 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"], //typescript issue, fixes getReactNativePersistence in firebase
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/home.rn.d.ts"], //typescript issue, fixes getReactNativePersistence in firebase
       "@/*": [
         "./*"
       ]

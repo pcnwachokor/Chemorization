@@ -1,48 +1,44 @@
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import { auth } from '../FirebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+//this is landing page
+import React from 'react';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-//import { SafeAreaView } from 'react-native-safe-area-context';
 
-const index = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const Index = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Welcome to Chemorization</Text>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('..//auth/signin')}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
 
-    const signIn = async () => {
-        try{
-            const user = await signInWithEmailAndPassword(auth, email, password)
-            if (user) router.replace('/(tabs)'); //routes user to tabs screen
-        } catch (error: any){
-            console.log(error)
-            alert('Sign in failed: ' + error.message);
-        }
-    }
-  
-    const signUp = async () => {
-        try{
-            const user = await createUserWithEmailAndPassword(auth, email, password)
-            if (user) router.replace('/(tabs)');
-        } catch (error: any){
-            console.log(error)
-            alert('Sign in failed: ' + error.message);
-        }
-    }
-    
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#006400', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: 'darkgreen',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
-    return (
-        <SafeAreaView>
-            <Text>Login</Text>
-            <TextInput placeholder-="email" value={email} onChangeText={setEmail}/>
-            <TextInput placeholder-="password" value={password} onChangeText={setPassword} secureTextEntry/>
-            <TouchableOpacity onPress={signIn}>
-                <Text>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={signUp}>
-                <Text>Sign Up</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
-    )
-}
-
-export default index
+export default Index;
