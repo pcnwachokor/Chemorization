@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { Pressable, Text } from 'react-native';
+import { router } from 'expo-router';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,6 +54,20 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="(auth)/signin" 
+          options={{ 
+            headerTransparent: true, 
+            title: "", 
+            headerLeft: () => false,
+            headerRight: () => ( // Adds the Cancel button
+              <Pressable onPress={() => router.back()}>
+                <Text style={{ color: "black", fontSize: 16, marginRight: 15 }}>Cancel</Text>
+              </Pressable>
+            ),
+          }} 
+        />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>

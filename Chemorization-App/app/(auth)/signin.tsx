@@ -3,6 +3,7 @@ import { SafeAreaView, TextInput, Text, TouchableOpacity, Alert, StyleSheet } fr
 import { auth } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { router } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ const SignInScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Access Account</Text>
+      <Text style={styles.title}>Log in</Text>
       <Text style={styles.subheading}>Access your personal chemistry learning experience</Text>
       <TextInput
         style={styles.input}
@@ -48,11 +49,16 @@ const SignInScreen = () => {
         secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={signIn}>
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={signUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={[styles.button, styles.signUpButton, styles.outlinedText]} onPress={signUp}>
+        <Text style={[styles.buttonText, { color: "black" }]}>Sign Up</Text>
       </TouchableOpacity>
+      {/* Will flesh out logic for forgot password */}
+      <TouchableOpacity>
+        <Text style={styles.text}>Forgot Password?</Text>
+      </TouchableOpacity>
+
     </SafeAreaView>
   );
 };
@@ -89,19 +95,38 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    backgroundColor: '#000000',
-    padding: 14,
+    backgroundColor: 'green',
+    padding: 7,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
   signUpButton: {
-    backgroundColor: '#013220',
+    backgroundColor: 'white',
+    outline: 'yes',
+    outlineColor: 'green',
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 15,
+    color: "green",
+    marginTop: 10,
+    marginRight: 200,
+    textAlign: "right",
+  },
+  outlinedText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    borderWidth: .2, // Thickness of the outline
+    borderColor: "black", // Outline color
+    backgroundColor: "white", // Background color inside the border
+  },
+  icon: {
+    marginBottom: 20,
   },
 });
 
