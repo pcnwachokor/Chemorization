@@ -22,15 +22,36 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: 'gray', //inactive tab color
+        tabBarStyle: {
+          backgroundColor: 'black',
+          borderTopWidth: 0, // removes top border for cleaner look
+          height: 100,
+          paddingTop: 10,
+        },
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
+        name="one"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="two"
+        options={{
+          title: 'Notes',
+          tabBarIcon: ({ color }) => <TabBarIcon name="sticky-note" color={color} />,
+        }}
+      />
+       <Tabs.Screen
         name="home"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -47,11 +68,18 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="two"
+       <Tabs.Screen
+        name="four"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Braille Print',
+          tabBarIcon: ({ color }) => <TabBarIcon name="print" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="five"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>
