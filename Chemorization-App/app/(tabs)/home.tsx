@@ -1,40 +1,103 @@
-import { StyleSheet, TouchableOpacity, View, Text} from 'react-native';
-import { auth } from '@/FirebaseConfig';
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { getAuth } from 'firebase/auth';
-import { router } from 'expo-router';
+import React from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-export default function TabOneScreen() {
 
-  getAuth().onAuthStateChanged((user) => {
-    if (!user) router.replace('/');
-  });
-// If user is not signed in, redirect to login screen
-  
+const HomeScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Out</Text>
-      <TouchableOpacity onPress={() => auth.signOut()}>
-        <Text>Sign Out</Text>    
-        {/* Signout button */}
-      </TouchableOpacity>
+      {/* Search Section */}
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchText}>Search for Chemistry Resources</Text>
+        <Ionicons name="volume-high" size={24} color="white" style={styles.speakerIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#555"
+        />
+      </View>
+
+      {/* Mic Button */}
+      <View style={styles.micContainer}>
+        <TouchableOpacity style={styles.micButton} onPress={() => console.log("Tapped Mic")} onLongPress={() => console.log("Long Press for Periodic Table")}>
+          <FontAwesome name="microphone" size={48} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Instructions */}
+      <Text style={styles.tapText}>Tap to Chemorize</Text>
+      <Text style={styles.orText}>OR</Text>
+      <Text style={styles.longPressText}>Long press for Periodic Table Assistant</Text>
     </View>
   );
-}
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#white",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  searchContainer: {
+    backgroundColor: "#2D7D46",
+    width: "100%",
+    height: 175,
+    padding: 50,
+    borderRadius: 15,
+    marginTop: -50,
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  searchText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 40,
+  },
+  speakerIcon: {
+    position: "absolute",
+    right: 20,
+    top: 90,
+  },
+  searchInput: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 10,
+    padding: 10,
+  },
+  micContainer: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+  micButton: {
+    backgroundColor: "#2D7D46",
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+    shadowColor: "#000",
+  },
+  tapText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 20,
+  },
+  orText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 5,
+    color: "#2D7D46",
+  },
+  longPressText: {
+    fontSize: 14,
+    color: "#2D7D46",
+    marginTop: 5,
   },
 });

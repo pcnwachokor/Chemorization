@@ -14,7 +14,7 @@ const SignInScreen = () => {
       if (user) router.replace('/(tabs)/home');
     } catch (error: any) {
       console.log(error);
-      Alert.alert('Sign In Failed', error.message);
+      Alert.alert('Sign In Failed');
     }
   };
 
@@ -24,13 +24,14 @@ const SignInScreen = () => {
       if (user) router.replace('/(tabs)/home');
     } catch (error: any) {
       console.log(error);
-      Alert.alert('Sign Up Failed', error.message);
+      Alert.alert('Sign Up Failed');
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Access Account</Text>
+      <Text style={styles.subheading}>Access your personal chemistry learning experience</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -68,10 +69,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#000000',
+    marginBottom: 4,
+  },
+  subheading: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#333333',
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: '90%',
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
