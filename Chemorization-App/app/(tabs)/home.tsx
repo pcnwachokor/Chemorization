@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
   searchContainer: {
     backgroundColor: "#2D7D46",
     width: "100%",
-    height: 175,
+    height: 185,
     padding: 50,
     borderRadius: 15,
-    marginTop: -50,
+    marginTop: 0,
     alignItems: "center",
     position: "absolute",
     top: 0,
