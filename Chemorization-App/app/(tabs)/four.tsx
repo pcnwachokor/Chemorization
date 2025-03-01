@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
+import FileUploader from "@/components/FileUploader";
 
 import braille from "@/components/braille";
 
@@ -75,14 +76,7 @@ export default function BrailleTranslation() {
         />
 
         <TouchableOpacity style={styles.button} onPress={textToBraille}>
-          <Text style={styles.buttonText}>Translate</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "red" }]}
-          onPress={textToBraille}
-        >
-          <Text style={styles.buttonText}>File Upload</Text>
+          <Text style={styles.buttonText}>Quick Translate</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -91,6 +85,8 @@ export default function BrailleTranslation() {
         >
           <Text style={styles.buttonText}>Generate PDF</Text>
         </TouchableOpacity>
+
+        <FileUploader />
       </View>
     </TouchableWithoutFeedback>
   );
