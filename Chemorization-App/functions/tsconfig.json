@@ -9,10 +9,17 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "skipLibCheck": true
   },
   "compileOnSave": true,
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules/@types/react-native"]
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules/@types/react-native"
+  ],
+  "extends": "expo/tsconfig.base"
 }

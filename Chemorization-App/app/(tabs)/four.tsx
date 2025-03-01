@@ -1,8 +1,6 @@
-/*import { StyleSheet } from 'react-native';
-import { Keyboard } from 'react-native'; */
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   TextInput,
@@ -11,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
@@ -49,14 +48,15 @@ export default function BrailleTranslation() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <View style={styles.separator} />
-        <View style={styles.inputRow}>
+        <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Enter text here..."
             value={inputText}
             onChangeText={(text) => setInputText(text)}
             multiline={true}
-            numberOfLines={4}
+            scrollEnabled={true}
+            textAlignVertical="top"
           />
           {/* Mic Button, will incorporate with tts later */}
           <TouchableOpacity
@@ -68,24 +68,26 @@ export default function BrailleTranslation() {
         </View>
 
         <TextInput
-          style={styles.translation}
+          style={styles.translationContainer}
           placeholder="Translation:"
           value={outputText}
           multiline={true}
-          numberOfLines={4}
+          scrollEnabled={true}
+          textAlignVertical="top"
+          editable={false}
         />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={textToBraille}>
+            <Text style={styles.buttonText}>Quick Translate</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={textToBraille}>
-          <Text style={styles.buttonText}>Quick Translate</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.button, styles.pdfButton]}
-          onPress={generatePDF}
-        >
-          <Text style={styles.buttonText}>Generate PDF</Text>
-        </TouchableOpacity>
-
+          <TouchableOpacity
+            style={[styles.button, styles.pdfButton]}
+            onPress={generatePDF}
+          >
+            <Text style={styles.buttonText}>Generate PDF</Text>
+          </TouchableOpacity>
+        </View>
         <FileUploader />
       </View>
     </TouchableWithoutFeedback>
@@ -103,6 +105,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginVertical: 10,
+  },
+  buttonContainer: {
+    marginTop: "auto",
   },
   button: {
     backgroundColor: "#007AFF",
@@ -125,14 +130,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   micButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
     backgroundColor: "#007AFF",
-    borderRadius: 25, // Circular button
+    borderRadius: 25,
     padding: 10,
-    marginLeft: 8, // Space between input and mic
   },
-  inputRow: {
-    flexDirection: "row", // Aligns TextInput and Mic Button horizontally
-    alignItems: "center", // Centers them vertically
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#f0f0f0",
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -140,15 +147,28 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    flex: 1, // Allows TextInput to take up most of the space
+    flex: 1,
     fontSize: 16,
     padding: 10,
+    paddingRight: 40,
+    maxHeight: 200,
+    minHeight: 50,
+    flexShrink: 1,
+  },
+  translationContainer: {
+    height: 200,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+    marginBottom: 10,
   },
   translation: {
-    backgroundColor: "#f9f9f9",
-    padding: 10,
-    borderRadius: 8,
+    flex: 1,
     fontSize: 16,
-    marginBottom: 10,
+    padding: 10,
+    textAlignVertical: "top",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: 20,
   },
 });
