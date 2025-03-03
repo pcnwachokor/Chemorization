@@ -17,6 +17,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.Chemorization-App"
     },
+    "ios": {
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "We need access to your photos to upload textbook pages."
+     }
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
