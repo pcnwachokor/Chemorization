@@ -26,14 +26,14 @@ const HomeScreen = () => {
         <TouchableOpacity
           style={styles.micButton}
           onPress={speak} // Trigger TTS on tap
-          //onLongPress={() => console.log("Long Press for Periodic Table")} // Can be customized
+          onLongPress={() => console.log("Long Press for Periodic Table")} // Can be customized
         >
           <FontAwesome name="microphone" size={48} color="white" />
         </TouchableOpacity>
       </View>
 
       {/* Instructions */}
-      <Text style={styles.tapText}>Tap the Mic!</Text>
+      <Text style={styles.tapText}>Tap the mic to hear an introduction.</Text>
       <Text style={styles.orText}>OR</Text>
       <Text style={styles.longPressText}>Long press for Periodic Table Assistant</Text>
     </View>
@@ -52,26 +52,26 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 14,
   },
   micContainer: {
-    marginTop: 24,
+    marginTop: 14,
     alignItems: "center",
   },
   micButton: {
     backgroundColor: "#2D7D46",
-    width: 170,
-    height: 170,
-    borderRadius: 70,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
     alignItems: "center",
     justifyContent: "center",
     elevation: 5,
     shadowColor: "#000",
   },
   tapText: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
-    marginTop: 25,
+    marginTop: 18,
   },
   orText: {
     fontSize: 16,
@@ -80,9 +80,8 @@ const styles = StyleSheet.create({
     color: "#2D7D46",
   },
   longPressText: {
-    fontSize: 18,
+    fontSize: 14,
     color: "#2D7D46",
     marginTop: 5,
   },
 });
-

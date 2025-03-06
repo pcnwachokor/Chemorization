@@ -9,7 +9,7 @@ const chemistryExplanations = [
   "Acids release hydrogen ions in water, while bases release hydroxide ions.",
 ];
 
-export default function TabTwoScreen() {
+const TTSReader = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const speak = () => {
@@ -26,11 +26,8 @@ export default function TabTwoScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Chemistry Notes</Text>
-
-      {/* Chemistry Explanation Text */}
       <Text style={styles.text}>{chemistryExplanations[currentIndex]}</Text>
-
+      
       {/* Play Button */}
       <TouchableOpacity style={styles.button} onPress={speak}>
         <FontAwesome name="play-circle" size={40} color="white" />
@@ -44,19 +41,15 @@ export default function TabTwoScreen() {
       </TouchableOpacity>
     </View>
   );
-}
+};
+
+export default TTSReader;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
   },
   text: {
     fontSize: 18,
@@ -78,4 +71,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
