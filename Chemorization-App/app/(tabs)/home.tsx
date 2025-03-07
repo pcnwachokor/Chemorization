@@ -28,21 +28,7 @@ const HomeScreen = () => {
         />
       </View>
 
-      {/* Mic Button
-      <View style={styles.micContainer}>
-        <TouchableOpacity style={styles.micButton} onPress={() => console.log("Tapped Mic")} onLongPress={() => console.log("Long Press for Periodic Table")}>
-          <FontAwesome name="microphone" size={48} color="white" />
-        </TouchableOpacity>
-      </View> */}
-
-      {/* Mic Button
-      <View style={styles.micContainer}>
-        <TouchableOpacity style={styles.micButton} onPress={() => console.log("Tapped Mic")} onLongPress={() => console.log("Long Press for Periodic Table")}>
-          <FontAwesome name="microphone" size={48} color="white" />
-        </TouchableOpacity>
-      </View> */}
-
-      {/* Instructions */}
+      {/* Mic Section */}
       <View style={styles.micContainer}>
         <Text style={styles.tapText}>Tap to Chemorize</Text>
         <RippleButton onPress={() => console.log("Tapped Mic")} />
@@ -60,14 +46,14 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#white",
+    backgroundColor: "#f0f0f0",
     alignItems: "center",
     justifyContent: "center",
   },
   searchContainer: {
     backgroundColor: "#2D7D46",
     width: "100%",
-    height: 185,
+    height: 200,
     padding: 50,
     borderRadius: 15,
     marginTop: 0,
@@ -79,12 +65,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: 40,
+    marginTop: 50,
   },
   speakerIcon: {
     position: "absolute",
     right: 20,
-    top: 90,
+    top: 100,
   },
   searchInput: {
     backgroundColor: "white",
