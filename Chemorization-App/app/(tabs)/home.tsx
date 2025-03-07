@@ -8,8 +8,22 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import RippleButton from "@/components/RippleButton";
+import * as Speech from "expo-speech";
+
 
 const HomeScreen = () => {
+  
+  // Function to speak predefined chemistry content
+  const speak = () => {
+    const textToSpeak = "Welcome to Chemorization. This app helps visually impaired students learn chemistry with voice assistance.";
+    
+    Speech.speak(textToSpeak, {
+      language: "en-US",
+      pitch: 1,
+      rate: 1,
+    });
+  };
+
   return (
     <View style={styles.container}>
       {/* Search Section */}
@@ -27,11 +41,13 @@ const HomeScreen = () => {
           placeholderTextColor="#555"
         />
       </View>
-
       {/* Mic Section */}
       <View style={styles.micContainer}>
         <Text style={styles.tapText}>Tap to Chemorize</Text>
-        <RippleButton onPress={() => console.log("Tapped Mic")} />
+        <RippleButton onPress={() => {
+            console.log("Tapped Mic"); //add longpress later
+            speak();
+          }} />
       </View>
       <Text style={styles.orText}>OR</Text>
       <Text style={styles.longPressText}>
@@ -80,7 +96,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   micContainer: {
-    marginTop: 40,
+    marginTop: 14,
     alignItems: "center",
   },
   micButton: {
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
   tapText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: 18,
   },
   orText: {
     fontSize: 16,
