@@ -1,7 +1,15 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import RippleButton from "@/components/RippleButton";
 import * as Speech from "expo-speech";
+
 
 const HomeScreen = () => {
   
@@ -18,24 +26,33 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Title */}
-      <Text style={styles.title}>Chemorization Home</Text>
-
-      {/* Mic Button for TTS */}
-      <View style={styles.micContainer}>
-        <TouchableOpacity
-          style={styles.micButton}
-          onPress={speak} // Trigger TTS on tap
-          onLongPress={() => console.log("Long Press for Periodic Table")} // Can be customized
-        >
-          <FontAwesome name="microphone" size={48} color="white" />
-        </TouchableOpacity>
+      {/* Search Section */}
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchText}>Search for Chemistry Resources</Text>
+        <Ionicons
+          name="volume-high"
+          size={24}
+          color="white"
+          style={styles.speakerIcon}
+        />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#555"
+        />
       </View>
-
-      {/* Instructions */}
-      <Text style={styles.tapText}>Tap the mic to hear an introduction.</Text>
+      {/* Mic Section */}
+      <View style={styles.micContainer}>
+        <Text style={styles.tapText}>Tap to Chemorize</Text>
+        <RippleButton onPress={() => {
+            console.log("Tapped Mic"); //add longpress later
+            speak();
+          }} />
+      </View>
       <Text style={styles.orText}>OR</Text>
-      <Text style={styles.longPressText}>Long press for Periodic Table Assistant</Text>
+      <Text style={styles.longPressText}>
+        Long press for Periodic Table Assistant
+      </Text>
     </View>
   );
 };
@@ -45,14 +62,38 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f0f0f0",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 32,
+  searchContainer: {
+    backgroundColor: "#2D7D46",
+    width: "100%",
+    height: 200,
+    padding: 50,
+    borderRadius: 15,
+    marginTop: 0,
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+  },
+  searchText: {
+    color: "white",
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 14,
+    marginTop: 50,
+  },
+  speakerIcon: {
+    position: "absolute",
+    right: 20,
+    top: 100,
+  },
+  searchInput: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 10,
+    padding: 10,
   },
   micContainer: {
     marginTop: 14,
