@@ -1,7 +1,13 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-
+import RippleButton from "@/components/RippleButton";
 
 const HomeScreen = () => {
   return (
@@ -9,7 +15,12 @@ const HomeScreen = () => {
       {/* Search Section */}
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for Chemistry Resources</Text>
-        <Ionicons name="volume-high" size={24} color="white" style={styles.speakerIcon} />
+        <Ionicons
+          name="volume-high"
+          size={24}
+          color="white"
+          style={styles.speakerIcon}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
@@ -17,17 +28,29 @@ const HomeScreen = () => {
         />
       </View>
 
-      {/* Mic Button */}
+      {/* Mic Button
       <View style={styles.micContainer}>
         <TouchableOpacity style={styles.micButton} onPress={() => console.log("Tapped Mic")} onLongPress={() => console.log("Long Press for Periodic Table")}>
           <FontAwesome name="microphone" size={48} color="white" />
         </TouchableOpacity>
-      </View>
+      </View> */}
+
+      {/* Mic Button
+      <View style={styles.micContainer}>
+        <TouchableOpacity style={styles.micButton} onPress={() => console.log("Tapped Mic")} onLongPress={() => console.log("Long Press for Periodic Table")}>
+          <FontAwesome name="microphone" size={48} color="white" />
+        </TouchableOpacity>
+      </View> */}
 
       {/* Instructions */}
-      <Text style={styles.tapText}>Tap to Chemorize</Text>
+      <View style={styles.micContainer}>
+        <Text style={styles.tapText}>Tap to Chemorize</Text>
+        <RippleButton onPress={() => console.log("Tapped Mic")} />
+      </View>
       <Text style={styles.orText}>OR</Text>
-      <Text style={styles.longPressText}>Long press for Periodic Table Assistant</Text>
+      <Text style={styles.longPressText}>
+        Long press for Periodic Table Assistant
+      </Text>
     </View>
   );
 };
