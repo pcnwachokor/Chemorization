@@ -1,15 +1,12 @@
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   TextInput,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";

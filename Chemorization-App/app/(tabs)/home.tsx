@@ -3,10 +3,9 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import RippleButton from "@/components/RippleButton";
 import * as Speech from "expo-speech";
 
