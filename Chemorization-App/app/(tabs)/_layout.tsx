@@ -7,10 +7,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
+function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>["name"]; color: string }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
@@ -44,9 +41,7 @@ export default function TabLayout() {
         name="two"
         options={{
           title: "Notes",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="sticky-note" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="sticky-note" color={color} />,
         }}
       />
       <Tabs.Screen
@@ -63,6 +58,16 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="print" color={color} />,
         }}
       />
+      
+      {/* ✅ New Summarizer Tab (Before Sign Out/Profile) */}
+      <Tabs.Screen
+        name="six"
+        options={{
+          title: "Summarizer",
+          tabBarIcon: ({ color }) => <TabBarIcon name="align-left" color={color} />, // Icon for summarizer
+        }}
+      />
+
       <Tabs.Screen
         name="five"
         options={{
