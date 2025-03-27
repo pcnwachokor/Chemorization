@@ -41,11 +41,11 @@ const HomeScreen = () => {
         <RippleButton
           onPress={() => {
             console.log('Tapped Mic');
-            speak();
+            //speak();
           }}
           onLongPress={() => {
             console.log('Long pressed');
-            speak();
+            //speak();
             router.push('/tablelookup');
           }}
         />
