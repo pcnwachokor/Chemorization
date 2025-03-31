@@ -46,7 +46,7 @@ const HomeScreen = () => {
           onLongPress={() => {
             console.log('Long pressed');
             //speak();
-            router.push('/tablelookup');
+            router.push('/assistant');
           }}
         />
       </View>
