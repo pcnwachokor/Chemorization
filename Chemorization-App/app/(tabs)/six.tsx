@@ -1,193 +1,106 @@
-import React, { useState } from "react";
-import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
-import { summarizeText } from "@/components/Summarize"; // ✅ Ensure this exists
-import { PDF_API_KEY, OCR_API_KEY } from "@env"; // ✅ Ensure these API keys exist in `.env`
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 
-const SummarizerScreen = () => {
-  const [inputText, setInputText] = useState("");  // ✅ Added state for text input
-  const [summary, setSummary] = useState("");
-  const [loading, setLoading] = useState(false);
+export default function TabSixScreen() {
+  const [text, setText] = useState('');
+  const [fileName, setFileName] = useState('');
 
-  // ✅ Summarize Manually Typed Text
-  const handleTextSummarize = async () => {
-    if (inputText.trim() === "") return;
-    setLoading(true);
-    const result = await summarizeText(inputText);
-    setSummary(result);
-    setLoading(false);
+  const handleSummarize = () => {
+    if (text.trim() === '' && fileName === '') {
+      Alert.alert('Error', 'Please enter text or upload a document to summarize.');
+      return;
+    }
+    // Placeholder for summarization logic
+    console.log('Summarizing:', text || `File: ${fileName}`);
+    Alert.alert('Summarization', 'Summarization feature is under development.');
   };
 
-  const extractTextFromPDF = async (base64Pdf: string): Promise<string> => {
+  const handleFileUpload = async () => {
     try {
-        const response = await fetch("https://api.pdf.co/v1/pdf/convert/to/text", {
-            method: "POST",
-            headers: {
-                "x-api-key": PDF_API_KEY, // ✅ Secure API Key
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ file: `data:application/pdf;base64,${base64Pdf}` }),
-        });
-
-        const data = await response.json();
-        return data.body || "No text extracted";
-    } catch (error) {
-        console.error("PDF extraction error:", error);
-        return "Error extracting text.";
-    }
-};
-  
-    
-
-  
-  // ✅ Pick and Process a PDF
-  const handlePdfUpload = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
-      if (result.canceled) return;
-
-      const fileUri = result.assets[0].uri;
-      const fileContent = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 });
-
-      // Extract text using PDF API
-      const extractedText = await extractTextFromPDF(fileContent);
-      setLoading(true);
-      const summarizedText = await summarizeText(extractedText);
-      setSummary(summarizedText);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-      setLoading(false);
-    }
-  };
-
-  // ✅ Pick and Process an Image (OCR)
-  const handleImageUpload = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-        base64: true,
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/pdf', // You can add more types if needed
+        copyToCacheDirectory: true,
       });
 
-      if (result.canceled) return;
-
-      const imageBase64 = result.assets[0].base64;
-      const extractedText = await extractTextFromImage(imageBase64);
-      setLoading(true);
-      const summarizedText = await summarizeText(extractedText);
-      setSummary(summarizedText);
-      setLoading(false);
+      // Ensure result is valid and check its type
+      if (result.type === 'success') {
+        setFileName(result.name || 'Unknown File');
+        console.log('File selected:', result);
+      } else {
+        console.log('File selection canceled.');
+      }
     } catch (error) {
-      console.error("Error processing image:", error);
-      setLoading(false);
+      console.error('Error picking document:', error);
+      Alert.alert('Error', 'Failed to upload the document.');
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Summarizer</Text>
-
-      {/* ✅ Text Input for User to Enter Text */}
       <TextInput
         style={styles.input}
-        placeholder="Type or paste text here..."
+        placeholder="Enter text to summarize"
+        value={text}
+        onChangeText={setText}
         multiline
-        value={inputText}
-        onChangeText={setInputText}
       />
-      <TouchableOpacity style={styles.button} onPress={handleTextSummarize} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Summarizing..." : "Summarize Text"}</Text>
+      <TouchableOpacity style={styles.uploadButton} onPress={handleFileUpload}>
+        <Text style={styles.uploadButtonText}>
+          {fileName ? `Uploaded: ${fileName}` : 'Upload PDF or Document'}
+        </Text>
       </TouchableOpacity>
-
-      {/* ✅ PDF Upload Button */}
-      <TouchableOpacity style={styles.pdfButton} onPress={handlePdfUpload} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Processing PDF..." : "Upload PDF"}</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSummarize}>
+        <Text style={styles.buttonText}>Summarize</Text>
       </TouchableOpacity>
-
-      {/* ✅ Image Upload Button */}
-      <TouchableOpacity style={styles.imageButton} onPress={handleImageUpload} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Processing Image..." : "Upload Image"}</Text>
-      </TouchableOpacity>
-
-      {loading && <ActivityIndicator size="large" color="white" />}
-
-      {/* ✅ Summary Output */}
-      <ScrollView style={styles.resultContainer}>
-        {summary ? <Text style={styles.result}>Summary: {summary}</Text> : <Text style={styles.placeholderText}>No summary yet.</Text>}
-      </ScrollView>
-    </SafeAreaView>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#006400",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
-    height: 100,
-    backgroundColor: "white",
-    borderRadius: 8,
+    width: '100%',
+    height: 150,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
-    textAlignVertical: "top", // ✅ Ensures input starts from top
+    marginBottom: 20,
+    textAlignVertical: 'top',
+  },
+  uploadButton: {
+    backgroundColor: '#6c757d',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+    width: '100%',
+    alignItems: 'center',
+  },
+  uploadButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   button: {
-    width: "80%",
-    alignItems: "center",
-    backgroundColor: "white",
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  pdfButton: {
-    width: "80%",
-    alignItems: "center",
-    backgroundColor: "#d35400",
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  imageButton: {
-    width: "80%",
-    alignItems: "center",
-    backgroundColor: "#3498db",
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 10,
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
   },
   buttonText: {
-    color: "darkgreen",
-    fontSize: 16,
-  },
-  resultContainer: {
-    width: "100%",
-    marginTop: 20,
-  },
-  result: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "left",
-  },
-  placeholderText: {
-    color: "gray",
-    fontSize: 16,
-    marginTop: 20,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
-
-export default SummarizerScreen;
