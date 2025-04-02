@@ -22,10 +22,13 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: ./Chemorization-App
         run: npm install
 
       - name: Lint and Test
+        working-directory: ./Chemorization-App
         run: npm run lint && npm test
 
       - name: Build (Optional)
+        working-directory: ./Chemorization-App
         run: echo "build steps go here"
