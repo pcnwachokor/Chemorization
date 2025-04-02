@@ -1,5 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -54,21 +58,25 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen 
-          name="(auth)/signin" 
-          options={{ 
-            headerTransparent: true, 
-            title: "", 
+        <Stack.Screen
+          name="(auth)/signin"
+          options={{
+            headerTransparent: true,
+            title: '',
             headerLeft: () => false,
-            headerRight: () => ( // Adds the Cancel button
+            headerRight: () => (
+              // Adds the Cancel button
               <Pressable onPress={() => router.back()}>
-                <Text style={{ color: "black", fontSize: 16, marginRight: 15 }}>Cancel</Text>
+                <Text style={{ color: 'black', fontSize: 16, marginRight: 15 }}>
+                  Cancel
+                </Text>
               </Pressable>
             ),
-          }} 
+          }}
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="assistant" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

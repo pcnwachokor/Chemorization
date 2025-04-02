@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    "babel-preset-expo", // other presets
+    'babel-preset-expo', // other presets
   ],
-  plugins: ["react-native-reanimated/plugin"],
+  plugins: ['react-native-reanimated/plugin'],
 };

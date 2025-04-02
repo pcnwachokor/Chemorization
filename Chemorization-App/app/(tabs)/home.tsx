@@ -1,23 +1,18 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import RippleButton from "@/components/RippleButton";
-import * as Speech from "expo-speech";
-
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import RippleButton from '@/components/RippleButton';
+import * as Speech from 'expo-speech';
+import { router } from 'expo-router';
 
 const HomeScreen = () => {
-  
   // Function to speak predefined chemistry content
   const speak = () => {
-    const textToSpeak = "Welcome to Chemorization. This app helps visually impaired students learn chemistry with voice assistance.";
-    
+    const textToSpeak =
+      'Welcome to Chemorization. This app helps visually impaired students learn chemistry with voice assistance.';
+
     Speech.speak(textToSpeak, {
-      language: "en-US",
+      language: 'en-US',
       pitch: 1,
       rate: 1,
     });
@@ -43,10 +38,17 @@ const HomeScreen = () => {
       {/* Mic Section */}
       <View style={styles.micContainer}>
         <Text style={styles.tapText}>Tap to Chemorize</Text>
-        <RippleButton onPress={() => {
-            console.log("Tapped Mic"); //add longpress later
-            speak();
-          }} />
+        <RippleButton
+          onPress={() => {
+            console.log('Tapped Mic');
+            //speak();
+          }}
+          onLongPress={() => {
+            console.log('Long pressed');
+            //speak();
+            router.push('/assistant');
+          }}
+        />
       </View>
       <Text style={styles.orText}>OR</Text>
       <Text style={styles.longPressText}>
@@ -61,67 +63,67 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   searchContainer: {
-    backgroundColor: "#2D7D46",
-    width: "100%",
+    backgroundColor: '#2D7D46',
+    width: '100%',
     height: 200,
     padding: 50,
     borderRadius: 15,
     marginTop: 0,
-    alignItems: "center",
-    position: "absolute",
+    alignItems: 'center',
+    position: 'absolute',
     top: 0,
   },
   searchText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 50,
   },
   speakerIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 20,
     top: 100,
   },
   searchInput: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
-    width: "100%",
+    width: '100%',
     marginTop: 10,
     padding: 10,
   },
   micContainer: {
     marginTop: 14,
-    alignItems: "center",
+    alignItems: 'center',
   },
   micButton: {
-    backgroundColor: "#2D7D46",
+    backgroundColor: '#2D7D46',
     width: 150,
     height: 150,
     borderRadius: 75,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     elevation: 5,
-    shadowColor: "#000",
+    shadowColor: '#000',
   },
   tapText: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 18,
   },
   orText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 5,
-    color: "#2D7D46",
+    color: '#2D7D46',
   },
   longPressText: {
     fontSize: 14,
-    color: "#2D7D46",
+    color: '#2D7D46',
     marginTop: 5,
   },
 });
