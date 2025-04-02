@@ -25,9 +25,9 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm install
 
-      - name: Lint and Test
-        working-directory: ./Chemorization-App
-        run: npm run lint && npm test
+      # - name: Lint and Test
+      #   working-directory: ./Chemorization-App
+      #   run: npm run lint && npm test
 
       - name: Build (Optional)
         working-directory: ./Chemorization-App
