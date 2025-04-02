@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import { auth } from '../../FirebaseConfig';
+import { auth } from '../(tabs)/FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { router } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';

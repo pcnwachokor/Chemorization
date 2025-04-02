@@ -33,6 +33,11 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+
+    },
+    "extra": {
+  "EXPO_PUBLIC_OPENAI_API_KEY": "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"
+  }
+  
   }
 }
