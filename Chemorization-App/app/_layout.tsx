@@ -1,71 +1,89 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
 import 'react-native-reanimated';
-
-import { useColorScheme } from '@/components/useColorScheme';
 import { Pressable, Text } from 'react-native';
 import { router } from 'expo-router';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
+export const unstable_settings = { initialRouteName: '(tabs)' };
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+interface CustomThemeContextType {
+  mode: "light" | "dark";
+  toggleTheme: () => void;
+  font: string;
+  setFont: (font: string) => void;
+  primaryColor: string;
+  setPrimaryColor: (color: string) => void;
+}
+const CustomThemeContext = createContext<CustomThemeContextType>({
+  mode: "light",
+  toggleTheme: () => {},
+  font: "System",
+  setFont: () => {},
+  primaryColor: "#006400", // default green
+  setPrimaryColor: () => {},
+});
+export const useCustomTheme = () => useContext(CustomThemeContext);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
+ 
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [font, setFont] = useState("System");
+  const [primaryColor, setPrimaryColor] = useState("#006400");
+  const toggleTheme = () => setMode(prev => (prev === "light" ? "dark" : "light"));
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  useEffect(() => { if (error) throw error; }, [error]);
+  useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
+  if (!loaded) return null;
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
+  return (
+    <CustomThemeContext.Provider value={{ mode, toggleTheme, font, setFont, primaryColor, setPrimaryColor }}>
+      <RootLayoutNav />
+    </CustomThemeContext.Provider>
+  );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const { mode, primaryColor } = useCustomTheme();
+  const baseTheme = mode === 'dark' ? DarkTheme : DefaultTheme;
+  // For dark mode, override the background to dark grey
+  const customBackground = mode === 'dark' ? '#333333' : baseTheme.colors.background;
+  const customTheme = {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: primaryColor,
+      background: customBackground,
+      text: '#000000', // Force text to always be black
+    },
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={customTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen 
-          name="(auth)/signin" 
-          options={{ 
-            headerTransparent: true, 
-            title: "", 
+        <Stack.Screen
+          name="(auth)/signin"
+          options={{
+            headerTransparent: true,
+            title: "",
             headerLeft: () => false,
-            headerRight: () => ( // Adds the Cancel button
+            headerRight: () => (
               <Pressable onPress={() => router.back()}>
-                <Text style={{ color: "black", fontSize: 16, marginRight: 15 }}>Cancel</Text>
+                <Text style={{ color: "#000000", fontSize: 16, marginRight: 15 }}>Cancel</Text>
               </Pressable>
             ),
-          }} 
+          }}
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
