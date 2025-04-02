@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import * as Speech from 'expo-speech';
 import Constants from 'expo-constants';
+
 const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY ?? '';
 
 export default function AssistantScreen() {
@@ -17,8 +18,6 @@ export default function AssistantScreen() {
   const [loading, setLoading] = useState(false);
 
   const askAI = async () => {
-    console.log('Question:', question); //
-    console.log('API Key:', OPENAI_API_KEY); // for dbebugging
     if (!question || !OPENAI_API_KEY) return;
     setLoading(true);
     setAnswer('');
@@ -37,7 +36,7 @@ export default function AssistantScreen() {
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
             messages: [{ role: 'user', content: prompt }],
-            max_tokens: 100,
+            max_tokens: 150,
           }),
         }
       );
@@ -59,25 +58,48 @@ export default function AssistantScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Periodic Table Assistant</Text>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      accessible={true}
+      accessibilityLabel="Periodic Table Assistant screen"
+      accessibilityHint="This screen allows you to ask chemistry questions using text input."
+    >
+      <Text
+        style={styles.title}
+        accessibilityRole="header"
+        accessibilityLabel="Periodic Table Assistant"
+      >
+        Periodic Table Assistant
+      </Text>
+
       <TextInput
         style={styles.input}
         placeholder="Ask a question about the periodic table..."
         value={question}
         onChangeText={setQuestion}
         multiline
+        accessibilityLabel="Question input field"
+        accessibilityHint="Type a question about the periodic table here"
       />
+
       <TouchableOpacity
         style={styles.button}
         onPress={askAI}
         disabled={loading}
+        accessibilityLabel="Ask button"
+        accessibilityRole="button"
+        accessibilityHint="Sends your question to the chemistry assistant"
       >
         <Text style={styles.buttonText}>{loading ? 'Thinking...' : 'Ask'}</Text>
       </TouchableOpacity>
 
       {answer ? (
-        <View style={styles.answerBox}>
+        <View
+          style={styles.answerBox}
+          accessible={true}
+          accessibilityLabel="AI response"
+          accessibilityHint="This is the response from the chemistry assistant"
+        >
           <Text style={styles.answerText}>{answer}</Text>
         </View>
       ) : null}
