@@ -8,8 +8,8 @@ import {
   ScrollView,
 } from 'react-native';
 import * as Speech from 'expo-speech';
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+import Constants from 'expo-constants';
+const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY ?? '';
 
 export default function AssistantScreen() {
   const [question, setQuestion] = useState('');
@@ -17,6 +17,8 @@ export default function AssistantScreen() {
   const [loading, setLoading] = useState(false);
 
   const askAI = async () => {
+    console.log('Question:', question); //
+    console.log('API Key:', OPENAI_API_KEY); // for dbebugging
     if (!question || !OPENAI_API_KEY) return;
     setLoading(true);
     setAnswer('');
@@ -35,7 +37,7 @@ export default function AssistantScreen() {
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
             messages: [{ role: 'user', content: prompt }],
-            max_tokens: 150,
+            max_tokens: 100,
           }),
         }
       );
@@ -90,6 +92,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     backgroundColor: '#fff',
     flexGrow: 1,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     minHeight: 80,
   },
   button: {
-    backgroundColor: '#0f4c75',
+    backgroundColor: '#2D7D46',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',

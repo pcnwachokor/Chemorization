@@ -76,7 +76,7 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        {/* <Stack.Screen name="tablelookup" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="assistant" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
