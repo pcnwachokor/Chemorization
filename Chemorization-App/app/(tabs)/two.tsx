@@ -1,153 +1,156 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from "react-native";
-import * as Speech from "expo-speech";
-import { FontAwesome } from "@expo/vector-icons";
-import Constants from "expo-constants";
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
+import * as Speech from 'expo-speech';
+import Constants from 'expo-constants';
 
-const chemistryExplanations = [
-  "The periodic table organizes elements based on atomic number and chemical properties.",
-  "A chemical reaction occurs when reactants transform into products, following the law of conservation of mass.",
-  "Acids release hydrogen ions in water, while bases release hydroxide ions.",
-];
+const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY ?? '';
 
-export default function TabTwoScreen() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function AssistantScreen() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const speak = () => {
-    Speech.speak(chemistryExplanations[currentIndex], {
-      language: "en-US",
-      pitch: 1,
-      rate: 1,
-    });
-  };
-
-  const nextExplanation = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % chemistryExplanations.length);
-  };
-
-  const getChemistryAnswer = async (question: string) => {
+  const askAI = async () => {
+    if (!question || !OPENAI_API_KEY) return;
     setLoading(true);
     setAnswer('');
+
+    const prompt = `You are a knowledgeable chemistry tutor. Answer the following chemistry question concisely and accurately. Question: ${question}`;
+
     try {
-      const apiKey = Constants.expoConfig?.extra?.EXPO_PUBLIC_OPENAI_API_KEY;
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a helpful chemistry tutor. Only answer chemistry-related questions.',
-            },
-            {
-              role: 'user',
-              content: question,
-            },
-          ],
-        }),
-      });
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 150,
+          }),
+        }
+      );
 
       const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-      setAnswer(content || 'No response received.');
+      const result = data.choices?.[0]?.message?.content?.trim();
+      if (result) {
+        setAnswer(result);
+        Speech.speak(result, { rate: 0.9 });
+      } else {
+        setAnswer('Sorry, no response received.');
+      }
     } catch (error) {
-      setAnswer('Failed to get an answer.');
+      console.error('Error contacting OpenAI:', error);
+      setAnswer('An error occurred. Try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Chemistry Notes</Text>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      accessible={true}
+      accessibilityLabel="Chemistry Assistant screen"
+      accessibilityHint="This screen allows you to ask any chemistry question using text input."
+    >
+      <Text
+        style={styles.title}
+        accessibilityRole="header"
+        accessibilityLabel="Chemistry Assistant"
+      >
+        Chemistry Assistant
+      </Text>
 
-      {/* Chemistry Explanation Text */}
-      <Text style={styles.text}>{chemistryExplanations[currentIndex]}</Text>
-
-      {/* Play Button */}
-      <TouchableOpacity style={styles.button} onPress={speak}>
-        <FontAwesome name="play-circle" size={40} color="white" />
-        <Text style={styles.buttonText}>Play Explanation</Text>
-      </TouchableOpacity>
-
-      {/* Next Explanation Button */}
-      <TouchableOpacity style={styles.button} onPress={nextExplanation}>
-        <FontAwesome name="arrow-right" size={40} color="white" />
-        <Text style={styles.buttonText}>Next Explanation</Text>
-      </TouchableOpacity>
-
-      {/* AI Q&A Section */}
-      <Text style={styles.subtitle}>Ask Chemistry Questions</Text>
       <TextInput
         style={styles.input}
-        placeholder="Type your question..."
+        placeholder="Ask a chemistry question..."
         value={question}
         onChangeText={setQuestion}
+        multiline
+        accessibilityLabel="Question input field"
+        accessibilityHint="Type any chemistry-related question here"
       />
-      <TouchableOpacity style={styles.button} onPress={() => getChemistryAnswer(question)}>
-        <Text style={styles.buttonText}>Get Answer</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={askAI}
+        disabled={loading}
+        accessibilityLabel="Ask button"
+        accessibilityRole="button"
+        accessibilityHint="Sends your question to the chemistry assistant"
+      >
+        <Text style={styles.buttonText}>{loading ? 'Thinking...' : 'Ask'}</Text>
       </TouchableOpacity>
-      {loading ? <ActivityIndicator style={{ marginTop: 20 }} /> : <Text style={styles.answer}>{answer}</Text>}
-    </View>
+
+      {answer ? (
+        <View
+          style={styles.answerBox}
+          accessible={true}
+          accessibilityLabel="AI response"
+          accessibilityHint="This is the response from the chemistry assistant"
+        >
+          <Text style={styles.answerText}>{answer}</Text>
+        </View>
+      ) : null}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    backgroundColor: '#fff',
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#2D7D46",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 30,
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    width: '100%',
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  answer: {
-    marginTop: 20,
-    fontSize: 16,
     textAlign: 'center',
   },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 16,
+    backgroundColor: '#f9f9f9',
+    marginBottom: 15,
+    minHeight: 80,
+  },
+  button: {
+    backgroundColor: '#2D7D46',
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  answerBox: {
+    backgroundColor: '#e0f7fa',
+    padding: 15,
+    borderRadius: 8,
+  },
+  answerText: {
+    fontSize: 16,
+  },
 });
+
