@@ -50,6 +50,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="six"
+        options={{
+          title: "Formula Solver",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="plus" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="home"
         options={{
           title: "Home",
