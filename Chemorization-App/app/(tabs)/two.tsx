@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     marginTop: 20,
-    fontSize: 16,
+    fontSize: 60,
     textAlign: 'center',
   },
 });
