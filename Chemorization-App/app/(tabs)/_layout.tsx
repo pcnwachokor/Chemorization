@@ -94,6 +94,13 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="seven"
+        options={{
+          title: "Summarizer",
+          tabBarIcon: ({ color }) => <TabBarIcon name="file" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
