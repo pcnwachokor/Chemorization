@@ -1,22 +1,65 @@
-import { Text, View } from '@/components/Themed';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
+  View,
+  Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
+import * as Speech from 'expo-speech';
+import Constants from 'expo-constants';
 
+const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY ?? '';
 
 export default function FormulaSolver() {
-  const [inputText, setInputText] = useState('');
-  const [outputText, setOutputText] = useState('');
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const solveFormula = () => {
-    setOutputText(inputText);
+  const askAI = async () => {
+    if (!question || !OPENAI_API_KEY) return;
+    setLoading(true);
+    setAnswer('');
+
+    const prompt = `You are a chemistry tutor AI. Only answer questions about balancing chemical equations. Be concise and accurate and show steps. Question: Balance this equation ${question}`;
+
+    try {
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 150,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const result = data.choices?.[0]?.message?.content?.trim();
+      if (result) {
+        setAnswer(result);
+        Speech.speak(result, { rate: 0.9 });
+      } else {
+        setAnswer('Sorry, no response received.');
+      }
+    } catch (error) {
+      console.error('Error contacting OpenAI:', error);
+      setAnswer('An error occurred. Try again.');
+    } finally {
+      setLoading(false);
+    }
   };
+
 
 
   return (
@@ -27,8 +70,8 @@ export default function FormulaSolver() {
           <TextInput
             style={styles.input}
             placeholder="Enter equation here..."
-            value={inputText}
-            onChangeText={setInputText}
+            value={question}
+            onChangeText={setQuestion}
             multiline={true}
             scrollEnabled={true}
             textAlignVertical="top"
@@ -45,7 +88,7 @@ export default function FormulaSolver() {
         <TextInput
           style={styles.answerContainer}
           placeholder="Answer:"
-          value={outputText}
+          value={answer}
           multiline={true}
           scrollEnabled={true}
           textAlignVertical="top"
@@ -53,7 +96,7 @@ export default function FormulaSolver() {
         />
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={solveFormula}>
+          <TouchableOpacity style={styles.button} onPress={askAI}>
             <Text style={styles.buttonText}>Balance Equation</Text>
           </TouchableOpacity>
         </View>
