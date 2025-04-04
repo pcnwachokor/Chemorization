@@ -1,16 +1,24 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View as RNView } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getAuth } from 'firebase/auth';
 import { router } from 'expo-router';
 import { auth } from './FirebaseConfig';
+import { useCustomTheme } from '@/app/_layout';
 
 export default function TabFiveScreen() {
   const [userEmail, setUserEmail] = useState('');
   const [notesCount, setNotesCount] = useState(0); // Replace with real value later
 
+  const { mode, primaryColor } = useCustomTheme();
+
+  const containerBackground = mode === 'dark' ? '#333333' : '#fff';
+  const headerBackground = mode === 'dark' ? '#000000' : '#f2f2f2';
+  const itemBackground = mode === 'dark' ? '#555555' : '#f2f2f2';
+
   useEffect(() => {
     const unsubscribe = getAuth().onAuthStateChanged((user) => {
+
       if (!user) return router.replace('/');
       setUserEmail(user.email || '');
     });
@@ -18,30 +26,38 @@ export default function TabFiveScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>My Profile</Text>
+    <View style={[styles.container, { backgroundColor: containerBackground }]}>
+      <RNView style={[styles.headerContainer, { backgroundColor: headerBackground }]}>
+        <Text style={[styles.header, { color: mode === 'dark' ? '#fff' : '#000' }]}>
+          My Profile
+        </Text>
+      </RNView>
 
-      <View style={styles.item}>
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Email</Text>
         <Text style={styles.itemValue}>{userEmail}</Text>
-      </View>
 
-      <View style={styles.item}>
+      </RNView>
+
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Notes Saved</Text>
         <Text style={styles.itemValue}>{notesCount}</Text>
-      </View>
 
-      <View style={styles.item}>
+      </RNView>
+
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Member Since</Text>
-        <Text style={styles.itemValue}>[Add Date]</Text>
-      </View>
 
-      <View style={styles.item}>
+        <Text style={styles.itemValue}>[Add Date]</Text>
+      </RNView>
+
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Role</Text>
         <Text style={styles.itemValue}>Student</Text>
-      </View>
 
-      <TouchableOpacity onPress={() => auth.signOut()} style={styles.button}>
+      </RNView>
+
+      <TouchableOpacity onPress={() => auth.signOut()} style={[styles.button, { backgroundColor: primaryColor }]}>
         <Text style={styles.buttonText}>Sign Out</Text>
       </TouchableOpacity>
     </View>
@@ -54,16 +70,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+  },
+  headerContainer: {
+    width: '100%',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 30,
+    alignItems: 'center',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
   },
   item: {
     width: '90%',
-    backgroundColor: '#f2f2f2',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
@@ -78,7 +98,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   button: {
-    backgroundColor: '#006400',
     padding: 10,
     borderRadius: 8,
     marginTop: 20,
@@ -88,4 +107,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

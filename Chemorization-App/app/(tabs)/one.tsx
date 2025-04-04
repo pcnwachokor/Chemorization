@@ -1,43 +1,50 @@
 import React from 'react';
-import { StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { StyleSheet, Switch, TouchableOpacity, View as RNView } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useCustomTheme } from '@/app/_layout';
 
 export default function SettingsScreen() {
   const { mode, toggleTheme, font, setFont, primaryColor, setPrimaryColor } = useCustomTheme();
 
+  const containerBackground = mode === 'dark' ? '#333333' : '#fff';
+  const headerBackground = mode === 'dark' ? '#000000' : '#f2f2f2';
+  const itemBackground = mode === 'dark' ? '#555555' : '#f2f2f2';
+  const headerTextColor = mode === 'dark' ? '#fff' : '#000';
+
+  const primaryColorName = primaryColor === '#006400' ? 'Green' : 'Blue';
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Settings</Text>
+    <View style={[styles.container, { backgroundColor: containerBackground }]}>
+      <RNView style={[styles.headerContainer, { backgroundColor: headerBackground }]}>
+        <Text style={[styles.header, { color: headerTextColor }]}>Appearance</Text>
+      </RNView>
      
-      <View style={styles.item}>
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Dark Mode</Text>
         <Switch value={mode === 'dark'} onValueChange={toggleTheme} />
-      </View>
-
-      <View style={styles.item}>
+      </RNView>
+     
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Font</Text>
         <Text style={styles.itemValue}>{font}</Text>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, { backgroundColor: primaryColor }]}
           onPress={() => setFont(font === 'System' ? 'SpaceMono' : 'System')}
         >
           <Text style={styles.buttonText}>Toggle Font</Text>
         </TouchableOpacity>
-      </View>
-
-      <View style={styles.item}>
+      </RNView>
+     
+      <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Primary Color</Text>
-        <Text style={styles.itemValue}>{primaryColor}</Text>
+        <Text style={styles.itemValue}>{primaryColorName}</Text>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            setPrimaryColor(primaryColor === 'Dark Green' ? 'Blue' : 'Dark Green')
-          }
+          style={[styles.button, { backgroundColor: primaryColor }]}
+          onPress={() => setPrimaryColor(primaryColor === '#006400' ? '#0000FF' : '#006400')}
         >
           <Text style={styles.buttonText}>Toggle Color</Text>
         </TouchableOpacity>
-      </View>
+      </RNView>
     </View>
   );
 }
@@ -46,18 +53,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+  },
+  headerContainer: {
+    width: '100%',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 30,
+    alignItems: 'center',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
   },
   item: {
     width: '90%',
-    backgroundColor: '#f2f2f2',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
@@ -72,7 +82,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   button: {
-    backgroundColor: '#006400',
     padding: 10,
     borderRadius: 8,
     marginTop: 5,
@@ -82,5 +91,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-

@@ -5,8 +5,8 @@ import { Pressable } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
+import { useCustomTheme } from "@/app/_layout";
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
@@ -16,20 +16,19 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { mode } = useCustomTheme(); // Get the custom dark/light mode state
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        tabBarInactiveTintColor: "gray", //inactive tab color
+        tabBarInactiveTintColor: "gray",
         tabBarStyle: {
           backgroundColor: "black",
-          borderTopWidth: 0, // removes top border for cleaner look
+          borderTopWidth: 0,
           height: 100,
           paddingTop: 10,
         },
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: false,
       }}
     >
@@ -38,14 +37,30 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+          headerShown: true,
+          headerTitleStyle: { color: mode === 'dark' ? '#fff' : '#000' },
+
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
           title: "Notes",
+          headerShown: true,
+          headerTitleStyle: { color: mode === 'dark' ? '#fff' : '#000' },
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="sticky-note" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="six"
+        options={{
+          title: "Formula Solver",
+          headerShown: true,
+          headerTitleStyle: { color: mode === 'dark' ? '#fff' : '#000' },
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="plus" color={color} />
           ),
         }}
       />
@@ -60,6 +75,8 @@ export default function TabLayout() {
         name="four"
         options={{
           title: "Braille Print",
+          headerShown: true,
+          headerTitleStyle: { color: mode === 'dark' ? '#fff' : '#000' },
           tabBarIcon: ({ color }) => <TabBarIcon name="print" color={color} />,
         }}
       />
@@ -69,6 +86,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           headerShown: true,
+          headerTitleStyle: { color: mode === 'dark' ? '#fff' : '#000' },
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -83,6 +101,13 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="seven"
+        options={{
+          title: "Summarizer",
+          tabBarIcon: ({ color }) => <TabBarIcon name="file" color={color} />,
         }}
       />
     </Tabs>
