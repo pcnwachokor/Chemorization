@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Chemorization-App",
+    "slug": "Chemorization-App",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.Chemorization-App"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+
+    },
+    "extra": {
+  "EXPO_PUBLIC_OPENAI_API_KEY": "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"
+  }
+  
+  }
+}
+

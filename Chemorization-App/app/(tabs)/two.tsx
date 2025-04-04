@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, TextInput, ActivityIndicator, TouchableOpacity } from "react-native";
+// Import custom Text and View to pick up the font changes from the global theme
+import { View, Text } from "@/components/Themed";
+
 import * as Speech from "expo-speech";
 import { FontAwesome } from "@expo/vector-icons";
+import Constants from "expo-constants";
 
 const chemistryExplanations = [
   "The periodic table organizes elements based on atomic number and chemical properties.",
@@ -11,9 +15,14 @@ const chemistryExplanations = [
 
 export default function TabTwoScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const speak = () => {
-    Speech.speak(chemistryExplanations[currentIndex], {
+    Speech.speak(
+    chemistryExplanations[currentIndex], {
+
       language: "en-US",
       pitch: 1,
       rate: 1,
@@ -24,24 +33,69 @@ export default function TabTwoScreen() {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % chemistryExplanations.length);
   };
 
+  const getChemistryAnswer = async (question: string) => {
+    setLoading(true);
+    setAnswer('');
+    try {
+      const apiKey = Constants.expoConfig?.extra?.
+EXPO_PUBLIC_OPENAI_API_KEY;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a helpful chemistry tutor. Only answer chemistry-related questions.',
+            },
+            {
+              role: 'user',
+              content: question,
+            },
+          ],
+        }),
+      });
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.
+content;
+
+      setAnswer(content || 'No response received.');
+    } catch (error) {
+      setAnswer('Failed to get an answer.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Chemistry Notes</Text>
-
-      {/* Chemistry Explanation Text */}
       <Text style={styles.text}>{chemistryExplanations[currentIndex]}</Text>
-
-      {/* Play Button */}
       <TouchableOpacity style={styles.button} onPress={speak}>
         <FontAwesome name="play-circle" size={40} color="white" />
         <Text style={styles.buttonText}>Play Explanation</Text>
       </TouchableOpacity>
-
-      {/* Next Explanation Button */}
       <TouchableOpacity style={styles.button} onPress={nextExplanation}>
         <FontAwesome name="arrow-right" size={40} color="white" />
         <Text style={styles.buttonText}>Next Explanation</Text>
       </TouchableOpacity>
+      <Text style={styles.subtitle}>Ask Chemistry Questions</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Type your question..."
+        value={question}
+        onChangeText={setQuestion}
+      />
+      <TouchableOpacity style={styles.button} onPress={() => getChemistryAnswer(question)}>
+        <Text style={styles.buttonText}>Get Answer</Text>
+      </TouchableOpacity>
+      {loading ? <ActivityIndicator style={{ marginTop: 20 }} /> : <Text style={styles.answer}>{answer}</Text>}
     </View>
   );
 }
@@ -77,5 +131,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
   },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 30,
+    marginBottom: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    width: '100%',
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  answer: {
+    marginTop: 20,
+    fontSize: 60,
+    textAlign: 'center',
+  },
 });
-
