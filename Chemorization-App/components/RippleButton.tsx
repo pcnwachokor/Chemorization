@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,14 +7,18 @@ import Animated, {
   withTiming,
   Easing,
   SharedValue,
-} from "react-native-reanimated";
-import { FontAwesome } from "@expo/vector-icons"; // Mic icon
+} from 'react-native-reanimated';
+import { FontAwesome } from '@expo/vector-icons'; // Mic icon
 // Define prop types
 interface RippleButtonProps {
   onPress: () => void;
+  onLongPress?: () => void;
 }
 
-const RippleButton: React.FC<RippleButtonProps> = ({ onPress }) => {
+const RippleButton: React.FC<RippleButtonProps> = ({
+  onPress,
+  onLongPress,
+}) => {
   // Define shared values with proper types
   const scale1: SharedValue<number> = useSharedValue(1);
   const opacity1: SharedValue<number> = useSharedValue(1);
@@ -67,7 +71,12 @@ const RippleButton: React.FC<RippleButtonProps> = ({ onPress }) => {
       <Animated.View style={[styles.ripple, animatedStyle3]} />
 
       {/* Mic Button */}
-      <TouchableOpacity style={styles.micButton} onPress={onPress}>
+      <TouchableOpacity
+        style={styles.micButton}
+        onPress={onPress}
+        onLongPress={onLongPress}
+        delayLongPress={500}
+      >
         <FontAwesome name="microphone" size={40} color="white" />
       </TouchableOpacity>
     </View>
@@ -78,26 +87,26 @@ const styles = StyleSheet.create({
   container: {
     width: 150,
     height: 150,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   ripple: {
-    position: "absolute",
+    position: 'absolute',
     width: 125,
     height: 125,
     borderRadius: 75,
-    backgroundColor: "rgba(34, 139, 34, 0.4)", // Green transparent
+    backgroundColor: 'rgba(34, 139, 34, 0.4)', // Green transparent
   },
   micButton: {
-    position: "absolute",
+    position: 'absolute',
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "green",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
     elevation: 5, // Android shadow
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 3 },
   },

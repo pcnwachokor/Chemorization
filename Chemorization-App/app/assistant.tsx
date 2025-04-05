@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import * as Speech from 'expo-speech';
 import Constants from 'expo-constants';
+import { View, Text } from '@/components/Themed';
+import { useCustomTheme } from '@/app/_layout';
 
 const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY ?? '';
 
@@ -16,30 +11,32 @@ export default function AssistantScreen() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+  const { mode, font, primaryColor } = useCustomTheme();
+
+  const containerBackground = mode === 'dark' ? '#333333' : '#f0f0f0';
+  const inputBackground = mode === 'dark' ? '#555555' : '#f9f9f9';
+  const answerBoxBackground = mode === 'dark' ? '#555555' : '#e0f7fa';
 
   const askAI = async () => {
     if (!question || !OPENAI_API_KEY) return;
     setLoading(true);
     setAnswer('');
 
-    const prompt = `You are a knowledgeable chemistry tutor. Answer the following chemistry question concisely and accurately. Question: ${question}`;
+    const prompt = `You are a chemistry tutor AI. Only answer questions about the periodic table. Be concise and accurate. Question: ${question}`;
 
     try {
-      const response = await fetch(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 150,
-          }),
-        }
-      );
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 150,
+        }),
+      });
 
       const data = await response.json();
       const result = data.choices?.[0]?.message?.content?.trim();
@@ -59,31 +56,32 @@ export default function AssistantScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
+      contentContainerStyle={[styles.container, { backgroundColor: containerBackground }]}
       accessible={true}
-      accessibilityLabel="Chemistry Assistant screen"
-      accessibilityHint="This screen allows you to ask any chemistry question using text input."
+      accessibilityLabel="Periodic Table Assistant screen"
+      accessibilityHint="This screen allows you to ask chemistry questions using text input."
     >
       <Text
-        style={styles.title}
+        style={[styles.title, { fontFamily: font === 'SpaceMono' ? 'SpaceMono' : undefined }]}
         accessibilityRole="header"
-        accessibilityLabel="Chemistry Assistant"
+        accessibilityLabel="Periodic Table Assistant"
       >
-        Chemistry Assistant
+        Periodic Table Assistant
       </Text>
 
       <TextInput
-        style={styles.input}
-        placeholder="Ask a chemistry question..."
+        style={[styles.input, { backgroundColor: inputBackground }]}
+        placeholder="Ask a question about the periodic table..."
+        placeholderTextColor="#555"
         value={question}
         onChangeText={setQuestion}
         multiline
         accessibilityLabel="Question input field"
-        accessibilityHint="Type any chemistry-related question here"
+        accessibilityHint="Type a question about the periodic table here"
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: primaryColor }]}
         onPress={askAI}
         disabled={loading}
         accessibilityLabel="Ask button"
@@ -95,12 +93,12 @@ export default function AssistantScreen() {
 
       {answer ? (
         <View
-          style={styles.answerBox}
+          style={[styles.answerBox, { backgroundColor: answerBoxBackground }]}
           accessible={true}
           accessibilityLabel="AI response"
           accessibilityHint="This is the response from the chemistry assistant"
         >
-          <Text style={styles.answerText}>{answer}</Text>
+          <Text style={[styles.answerText, { fontFamily: font === 'SpaceMono' ? 'SpaceMono' : undefined }]}>{answer}</Text>
         </View>
       ) : null}
     </ScrollView>
@@ -112,7 +110,6 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 20,
     paddingBottom: 40,
-    backgroundColor: '#fff',
     flexGrow: 1,
     justifyContent: 'center',
   },
@@ -121,6 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#000', // Always black text
   },
   input: {
     borderWidth: 1,
@@ -128,12 +126,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 15,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
     marginBottom: 15,
     minHeight: 80,
   },
   button: {
-    backgroundColor: '#2D7D46',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -145,7 +141,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   answerBox: {
-    backgroundColor: '#e0f7fa',
     padding: 15,
     borderRadius: 8,
   },
@@ -153,4 +148,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

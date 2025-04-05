@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import { auth } from '../(tabs)/FirebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  SafeAreaView,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from 'react-native';
+import { auth } from '../../FirebaseConfig';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { router } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -32,7 +41,9 @@ const SignInScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log in</Text>
-      <Text style={styles.subheading}>Access your personal chemistry learning experience</Text>
+      <Text style={styles.subheading}>
+        Access your personal chemistry learning experience
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -51,14 +62,16 @@ const SignInScreen = () => {
       <TouchableOpacity style={styles.button} onPress={signIn}>
         <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.signUpButton, styles.outlinedText]} onPress={signUp}>
-        <Text style={[styles.buttonText, { color: "black" }]}>Sign Up</Text>
+      <TouchableOpacity
+        style={[styles.button, styles.signUpButton, styles.outlinedText]}
+        onPress={signUp}
+      >
+        <Text style={[styles.buttonText, { color: 'black' }]}>Sign Up</Text>
       </TouchableOpacity>
       {/* Will flesh out logic for forgot password */}
       <TouchableOpacity>
         <Text style={styles.text}>Forgot Password?</Text>
       </TouchableOpacity>
-
     </SafeAreaView>
   );
 };
@@ -113,17 +126,17 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 15,
-    color: "green",
+    color: 'green',
     marginTop: 10,
     marginRight: 200,
-    textAlign: "right",
+    textAlign: 'right',
   },
   outlinedText: {
     fontSize: 18,
-    fontWeight: "bold",
-    borderWidth: .2, // Thickness of the outline
-    borderColor: "black", // Outline color
-    backgroundColor: "white", // Background color inside the border
+    fontWeight: 'bold',
+    borderWidth: 0.2, // Thickness of the outline
+    borderColor: 'black', // Outline color
+    backgroundColor: 'white', // Background color inside the border
   },
   icon: {
     marginBottom: 20,
