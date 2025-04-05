@@ -16,9 +16,9 @@ OUR PRODUCT tailors summaries for chemistry students and offers Braille-compatib
 
 ### Setup
 ```sh
-git clone https://github.com/pcnwachokor/3444-Espoir
+git clone https://github.com/pcnwachokor/Chemorization
 
-cd 3444-Espoir
+cd Chemorization
 
 cd Chemorization-App
 
