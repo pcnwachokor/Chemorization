@@ -1,29 +1,24 @@
-import React, { useState } from "react";
-import { StyleSheet, TextInput, ActivityIndicator, TouchableOpacity } from "react-native";
-// Import custom Text and View to pick up the font changes from the global theme
-import { View, Text } from "@/components/Themed";
-
-import * as Speech from "expo-speech";
-import { FontAwesome } from "@expo/vector-icons";
-import Constants from "expo-constants";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import * as Speech from 'expo-speech';
+import * as DocumentPicker from 'expo-document-picker';
+import { FontAwesome } from '@expo/vector-icons';
+import { db, storage } from '@/FirebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const chemistryExplanations = [
-  "The periodic table organizes elements based on atomic number and chemical properties.",
-  "A chemical reaction occurs when reactants transform into products, following the law of conservation of mass.",
-  "Acids release hydrogen ions in water, while bases release hydroxide ions.",
+  'The periodic table organizes elements based on atomic number and chemical properties.',
+  'A chemical reaction occurs when reactants transform into products, following the law of conservation of mass.',
+  'Acids release hydrogen ions in water, while bases release hydroxide ions.',
 ];
 
 export default function TabTwoScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const speak = () => {
-    Speech.speak(
-    chemistryExplanations[currentIndex], {
-
-      language: "en-US",
+    Speech.speak(chemistryExplanations[currentIndex], {
+      language: 'en-US',
       pitch: 1,
       rate: 1,
     });
@@ -33,69 +28,62 @@ export default function TabTwoScreen() {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % chemistryExplanations.length);
   };
 
-  const getChemistryAnswer = async (question: string) => {
-    setLoading(true);
-    setAnswer('');
+  const uploadNoteFile = async () => {
     try {
-      const apiKey = Constants.expoConfig?.extra?.
-EXPO_PUBLIC_OPENAI_API_KEY;
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a helpful chemistry tutor. Only answer chemistry-related questions.',
-            },
-            {
-              role: 'user',
-              content: question,
-            },
-          ],
-        }),
+      if (result.canceled || !result.assets?.[0]) {
+        Alert.alert('Cancelled', 'No file selected.');
+        return;
+      }
+
+      const file = result.assets[0];
+      const response = await fetch(file.uri);
+      const blob = await response.blob();
+
+      // Reference to Firebase Storage under the path 'chemistryNotes/'
+      const storageRef = ref(storage, `chemistryNotes/${file.name}`);
+      
+      // Upload file to Firebase Storage
+      await uploadBytes(storageRef, blob);
+
+      // Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Add document to Firestore with file details
+      await addDoc(collection(db, 'chemistryNotes'), {
+        name: file.name,
+        url: downloadURL,
+        uploadedAt: new Date(),
       });
 
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.
-content;
-
-      setAnswer(content || 'No response received.');
+      Alert.alert('Success', 'File successfully uploaded!');
     } catch (error) {
-      setAnswer('Failed to get an answer.');
-    } finally {
-      setLoading(false);
+      console.error('Upload error:', error);
+      Alert.alert('Error', 'File upload failed.');
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Chemistry Notes</Text>
+
       <Text style={styles.text}>{chemistryExplanations[currentIndex]}</Text>
+
       <TouchableOpacity style={styles.button} onPress={speak}>
         <FontAwesome name="play-circle" size={40} color="white" />
         <Text style={styles.buttonText}>Play Explanation</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={nextExplanation}>
         <FontAwesome name="arrow-right" size={40} color="white" />
         <Text style={styles.buttonText}>Next Explanation</Text>
       </TouchableOpacity>
-      <Text style={styles.subtitle}>Ask Chemistry Questions</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Type your question..."
-        value={question}
-        onChangeText={setQuestion}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => getChemistryAnswer(question)}>
-        <Text style={styles.buttonText}>Get Answer</Text>
+
+      <TouchableOpacity style={styles.button} onPress={uploadNoteFile}>
+        <FontAwesome name="upload" size={30} color="white" />
+        <Text style={styles.buttonText}>Upload Chemistry Note</Text>
       </TouchableOpacity>
-      {loading ? <ActivityIndicator style={{ marginTop: 20 }} /> : <Text style={styles.answer}>{answer}</Text>}
     </View>
   );
 }
@@ -103,52 +91,33 @@ content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   text: {
     fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 20,
   },
   button: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#2D7D46",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2D7D46',
     padding: 15,
     borderRadius: 10,
     marginTop: 10,
   },
   buttonText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
     marginLeft: 10,
   },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 30,
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    width: '100%',
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  answer: {
-    marginTop: 20,
-    fontSize: 60,
-    textAlign: 'center',
-  },
 });
+
