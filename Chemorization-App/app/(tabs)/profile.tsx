@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View as RNView } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getAuth } from 'firebase/auth';
 import { router } from 'expo-router';
-import { auth } from './FirebaseConfig';
+import { auth } from '@/FirebaseConfig';
 import { useCustomTheme } from '@/app/_layout';
 
 export default function TabFiveScreen() {
@@ -18,7 +18,6 @@ export default function TabFiveScreen() {
 
   useEffect(() => {
     const unsubscribe = getAuth().onAuthStateChanged((user) => {
-
       if (!user) return router.replace('/');
       setUserEmail(user.email || '');
     });
@@ -27,8 +26,12 @@ export default function TabFiveScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: containerBackground }]}>
-      <RNView style={[styles.headerContainer, { backgroundColor: headerBackground }]}>
-        <Text style={[styles.header, { color: mode === 'dark' ? '#fff' : '#000' }]}>
+      <RNView
+        style={[styles.headerContainer, { backgroundColor: headerBackground }]}
+      >
+        <Text
+          style={[styles.header, { color: mode === 'dark' ? '#fff' : '#000' }]}
+        >
           My Profile
         </Text>
       </RNView>
@@ -36,13 +39,11 @@ export default function TabFiveScreen() {
       <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Email</Text>
         <Text style={styles.itemValue}>{userEmail}</Text>
-
       </RNView>
 
       <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Notes Saved</Text>
         <Text style={styles.itemValue}>{notesCount}</Text>
-
       </RNView>
 
       <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
@@ -54,10 +55,12 @@ export default function TabFiveScreen() {
       <RNView style={[styles.item, { backgroundColor: itemBackground }]}>
         <Text style={styles.itemLabel}>Role</Text>
         <Text style={styles.itemValue}>Student</Text>
-
       </RNView>
 
-      <TouchableOpacity onPress={() => auth.signOut()} style={[styles.button, { backgroundColor: primaryColor }]}>
+      <TouchableOpacity
+        onPress={() => auth.signOut()}
+        style={[styles.button, { backgroundColor: primaryColor }]}
+      >
         <Text style={styles.buttonText}>Sign Out</Text>
       </TouchableOpacity>
     </View>
