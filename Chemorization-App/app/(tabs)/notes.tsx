@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as Speech from 'expo-speech';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome } from '@expo/vector-icons';
-import { db, storage } from '@/FirebaseConfig';
+import { db, storage } from '@/FirebaseConfig'; // Correct the import based on your config file
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -120,4 +120,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
+
 
