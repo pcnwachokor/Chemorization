@@ -60,8 +60,6 @@ export default function FormulaSolver() {
     }
   };
 
-
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#2D7D46',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',

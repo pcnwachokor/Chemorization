@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#6c757d',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   pdfButton: {
-    backgroundColor: '#28A745',
+    backgroundColor: '#2D7D46',
   },
   micContainer: {
     marginTop: 40,

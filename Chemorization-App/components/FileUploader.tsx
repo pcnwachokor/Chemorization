@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Button,
@@ -7,15 +7,15 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-} from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
-import braille from "@/components/braille";
-import { generatePDF } from "@/utils/pdfUtils";
+} from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+import braille from '@/components/braille';
+import { generatePDF } from '@/utils/pdfUtils';
 
 const FileUploader = () => {
-  const [fileContent, setFileContent] = useState("");
-  const [outputText, setOutputText] = useState("");
+  const [fileContent, setFileContent] = useState('');
+  const [outputText, setOutputText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [isConverted, setIsConverted] = useState(false); // Tracks if Braille conversion has occurred
 
@@ -23,7 +23,10 @@ const FileUploader = () => {
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: "text/plain", // supports text files
+        type: [
+          'text/plain', // supports text files
+          //'application/vnd.openxmlformats-officedocument.wordprocessingml.document', //docx is more complex, will research
+        ],
       });
 
       if (result.canceled || !result.assets) return;
@@ -33,15 +36,14 @@ const FileUploader = () => {
       // Read file content
       const content = await FileSystem.readAsStringAsync(fileUri);
       setFileContent(content);
-      setOutputText("");
+      setOutputText('');
       setIsConverted(false);
       setModalVisible(true);
     } catch (error) {
-      console.error("Error picking document:", error);
+      console.error('Error picking document:', error);
     }
   };
 
-  // Function to translate text to Braille
   const textToBraille = () => {
     if (!fileContent) return;
     setOutputText(braille.toBraille(fileContent));
@@ -61,7 +63,7 @@ const FileUploader = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.label}>
-              {isConverted ? "Braille Translation" : "Original Text"}
+              {isConverted ? 'Braille Translation' : 'Original Text'}
             </Text>
             <ScrollView style={styles.textScroll}>
               <Text style={styles.text}>
@@ -107,25 +109,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: "center",
-    backgroundColor: "white",
+    justifyContent: 'center',
+    backgroundColor: 'white',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
   },
   modalContent: {
-    width: "90%",
-    backgroundColor: "white",
+    width: '90%',
+    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   label: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   textScroll: {
@@ -134,43 +136,43 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    textAlign: "left",
+    textAlign: 'left',
   },
   convertButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: '#2D7D46',
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
   },
   convertButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   button: {
     padding: 12,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 5,
-    width: "100%",
+    width: '100%',
   },
   pdfButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: '#2D7D46',
   },
   buttonText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   closeButton: {
-    backgroundColor: "#ff5c5c",
+    backgroundColor: '#ff5c5c',
     padding: 10,
     borderRadius: 5,
   },
   closeButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
