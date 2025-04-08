@@ -101,6 +101,8 @@ function RootLayoutNav() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         <Stack.Screen name="assistant" options={{ headerShown: false }} />
+        <Stack.Screen name="add" options={{ title: 'Upload Note' }} />
+        <Stack.Screen name="view" options={{ title: 'View Notes' }} />
       </Stack>
     </ThemeProvider>
   );
