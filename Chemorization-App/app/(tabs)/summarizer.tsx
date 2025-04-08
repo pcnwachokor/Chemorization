@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  View,
+  Alert,
+} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { summarizeText } from '@/components/Summarize'; // Import the summarize function
 
@@ -10,14 +17,16 @@ export default function TabSevenScreen() {
 
   const handleSummarize = async () => {
     if (text.trim() === '' && fileName === '') {
-      Alert.alert('Error', 'Please enter text or upload a document to summarize.');
+      Alert.alert(
+        'Error',
+        'Please enter text or upload a document to summarize.'
+      );
       return;
     }
 
     try {
       const result = await summarizeText(text); // Call the summarizeText function
       setSummary(result); // Update the summary state
-      Alert.alert('Summary', result); // Display the summary in an alert
     } catch (error) {
       console.error('Error summarizing text:', error);
       Alert.alert('Error', 'Failed to summarize the text.');
