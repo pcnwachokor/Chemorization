@@ -1,32 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import * as Speech from 'expo-speech';
+import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome } from '@expo/vector-icons';
-import { db, storage } from '@/FirebaseConfig'; // Correct the import based on your config file
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useRouter } from 'expo-router';
+import { db, storage } from '@/FirebaseConfig'; // Ensure this path is correct
 
-const chemistryExplanations = [
-  'The periodic table organizes elements based on atomic number and chemical properties.',
-  'A chemical reaction occurs when reactants transform into products, following the law of conservation of mass.',
-  'Acids release hydrogen ions in water, while bases release hydroxide ions.',
-];
-
-export default function TabTwoScreen() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const speak = () => {
-    Speech.speak(chemistryExplanations[currentIndex], {
-      language: 'en-US',
-      pitch: 1,
-      rate: 1,
-    });
-  };
-
-  const nextExplanation = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % chemistryExplanations.length);
-  };
+export default function NotesHomeScreen() {
+  const router = useRouter();
 
   const uploadNoteFile = async () => {
     try {
@@ -41,17 +29,11 @@ export default function TabTwoScreen() {
       const response = await fetch(file.uri);
       const blob = await response.blob();
 
-      // Reference to Firebase Storage under the path 'chemistryNotes/'
-      const storageRef = ref(storage, `chemistryNotes/${file.name}`);
-      
-      // Upload file to Firebase Storage
+      const storageRef = ref(storage, `notes/${file.name}`);
       await uploadBytes(storageRef, blob);
-
-      // Get the download URL
       const downloadURL = await getDownloadURL(storageRef);
 
-      // Add document to Firestore with file details
-      await addDoc(collection(db, 'chemistryNotes'), {
+      await addDoc(collection(db, 'notes'), {
         name: file.name,
         url: downloadURL,
         uploadedAt: new Date(),
@@ -66,23 +48,21 @@ export default function TabTwoScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Chemistry Notes</Text>
+      <Text style={styles.title}>My Notes</Text>
 
-      <Text style={styles.text}>{chemistryExplanations[currentIndex]}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={speak}>
-        <FontAwesome name="play-circle" size={40} color="white" />
-        <Text style={styles.buttonText}>Play Explanation</Text>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/add')}>
+        <FontAwesome name="plus-circle" size={30} color="white" />
+        <Text style={styles.buttonText}>Add New Note</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={nextExplanation}>
-        <FontAwesome name="arrow-right" size={40} color="white" />
-        <Text style={styles.buttonText}>Next Explanation</Text>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/view')}>
+        <FontAwesome name="folder-open" size={30} color="white" />
+        <Text style={styles.buttonText}>View Notes</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={uploadNoteFile}>
         <FontAwesome name="upload" size={30} color="white" />
-        <Text style={styles.buttonText}>Upload Chemistry Note</Text>
+        <Text style={styles.buttonText}>Upload Note File</Text>
       </TouchableOpacity>
     </View>
   );
@@ -98,13 +78,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 40,
   },
   button: {
     flexDirection: 'row',
@@ -112,7 +86,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#2D7D46',
     padding: 15,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 20,
+    width: '80%',
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'white',
@@ -120,5 +96,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
-
