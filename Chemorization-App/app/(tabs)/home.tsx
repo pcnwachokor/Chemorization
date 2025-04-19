@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import { View, Text } from '@/components/Themed'; // Use custom Themed components for Text & View
+import { View, Text } from '@/components/Themed'; // Themed wrapper
 import { Ionicons } from '@expo/vector-icons';
 import RippleButton from '@/components/RippleButton';
 import * as Speech from 'expo-speech';
@@ -9,10 +9,10 @@ import { useCustomTheme } from '@/app/_layout';
 
 const HomeScreen = () => {
   const { mode } = useCustomTheme();
-
   const containerBackground = mode === 'dark' ? '#333333' : '#f0f0f0';
 
-  // Function to speak predefined chemistry content
+  const [query, setQuery] = useState('');
+
   const speak = () => {
     const textToSpeak =
       'Welcome to Chemorization. This app helps visually impaired students learn chemistry with voice assistance.';
@@ -23,24 +23,35 @@ const HomeScreen = () => {
     });
   };
 
+  const handleSearch = () => {
+    if (!query.trim()) return;
+    router.push({
+      pathname: '/searchresults',
+      params: { query: query.trim() },
+    });
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: containerBackground }]}>
-      <View style={styles.searchContainer}
->
+      <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for Chemistry Resources</Text>
-
         <Ionicons
           name="volume-high"
           size={24}
           color="white"
           style={styles.speakerIcon}
         />
+
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor="#555"
+          value={query}
+          onChangeText={setQuery}
+          onSubmitEditing={handleSearch}
         />
       </View>
+
       <View style={styles.micContainer}>
         <Text style={styles.tapText}>Tap to Chemorize</Text>
         <RippleButton
@@ -54,6 +65,7 @@ const HomeScreen = () => {
           }}
         />
       </View>
+
       <Text style={styles.orText}>OR</Text>
       <Text style={styles.longPressText}>
         Long press for Periodic Table Assistant
@@ -69,13 +81,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor will be overridden inline
-
   },
   searchContainer: {
     backgroundColor: '#2D7D46',
     width: '100%',
-    height: 200,
+    height: 250,
     padding: 50,
     borderRadius: 15,
     position: 'absolute',
@@ -99,9 +109,10 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     padding: 10,
+    color: '#000',
   },
   micContainer: {
-    marginTop: 30, // was 14
+    marginTop: 30,
     alignItems: 'center',
   },
   tapText: {
@@ -119,5 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2D7D46',
     marginTop: 5,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
