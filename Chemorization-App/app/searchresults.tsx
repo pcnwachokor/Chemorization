@@ -1,10 +1,17 @@
-// app/SearchResultsScreen.tsx
+// app/searchresults.tsx
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import { searchPubChemCompound } from '@/components/api/pubchem';
 import { getWikiSummary } from '@/components/api/wikipedia';
-import { useLocalSearchParams } from 'expo-router';
 
 export default function SearchResultsScreen() {
   const { query } = useLocalSearchParams();
@@ -29,39 +36,82 @@ export default function SearchResultsScreen() {
     fetchData();
   }, [query]);
 
+  // Helper to extract property values
+  const getProperty = (label: string) => {
+    const props = compoundData?.PC_Compounds?.[0]?.props || [];
+    return (
+      props.find((p: any) => p.urn.label === label)?.value?.sval ||
+      props.find((p: any) => p.urn.label === label)?.value?.fval
+    );
+  };
+
+  const cid = compoundData?.PC_Compounds?.[0]?.id?.id?.cid;
+  const imageUrl = cid
+    ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG`
+    : null;
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Search Results for "{query}"</Text>
 
       {loading && <ActivityIndicator size="large" color="#2D7D46" />}
 
       {!loading && compoundData && (
         <View style={styles.resultBlock}>
-          <Text style={styles.header}>PubChem CID:</Text>
-          <Text>
-            {compoundData?.PC_Compounds?.[0]?.id?.id?.cid ?? 'Not found'}
-          </Text>
+          {imageUrl && (
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          )}
+
+          <Text style={styles.header}>IUPAC Name:</Text>
+          <Text>{getProperty('IUPAC Name') || 'Not available'}</Text>
+
+          <Text style={styles.header}>Molecular Formula:</Text>
+          <Text>{getProperty('Molecular Formula') || 'Not available'}</Text>
+
+          <Text style={styles.header}>Molecular Weight:</Text>
+          <Text>{getProperty('Molecular Weight') || 'Not available'}</Text>
         </View>
       )}
 
       {!loading && wikiData && (
         <View style={styles.resultBlock}>
           <Text style={styles.header}>Wikipedia Summary:</Text>
-          <Text>{wikiData.extract}</Text>
+          <Text>{wikiData.extract || 'No summary available'}</Text>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  container: {
+    padding: 20,
+    paddingBottom: 40,
+    flexGrow: 1,
+    backgroundColor: '#fff',
+  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#2D7D46',
+    textAlign: 'center',
   },
-  resultBlock: { marginBottom: 20 },
-  header: { fontWeight: 'bold', fontSize: 16, marginBottom: 5 },
+  resultBlock: {
+    marginBottom: 25,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginTop: 10,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+  },
 });
