@@ -36,6 +36,7 @@ export default {
     },
     extra: {
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      ASSEMBLY_API_KEY: process.env.ASSEMBLY_API_KEY,
     },
   },
 };
