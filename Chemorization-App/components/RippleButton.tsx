@@ -8,18 +8,21 @@ import Animated, {
   Easing,
   SharedValue,
 } from 'react-native-reanimated';
-import { FontAwesome } from '@expo/vector-icons'; // Mic icon
-// Define prop types
+import { FontAwesome } from '@expo/vector-icons';
+
 interface RippleButtonProps {
   onPress: () => void;
   onLongPress?: () => void;
+  animate?: boolean;
+  color?: string;
 }
 
 const RippleButton: React.FC<RippleButtonProps> = ({
   onPress,
   onLongPress,
+  animate = false,
+  color = 'green',
 }) => {
-  // Define shared values with proper types
   const scale1: SharedValue<number> = useSharedValue(1);
   const opacity1: SharedValue<number> = useSharedValue(1);
   const scale2: SharedValue<number> = useSharedValue(1);
@@ -28,10 +31,11 @@ const RippleButton: React.FC<RippleButtonProps> = ({
   const opacity3: SharedValue<number> = useSharedValue(1);
 
   useEffect(() => {
+    if (!animate) return;
+
     const startRipple = (
       scale: SharedValue<number>,
-      opacity: SharedValue<number>,
-      delay: number
+      opacity: SharedValue<number>
     ) => {
       scale.value = withRepeat(
         withTiming(2, { duration: 1500, easing: Easing.linear }),
@@ -45,12 +49,11 @@ const RippleButton: React.FC<RippleButtonProps> = ({
       );
     };
 
-    startRipple(scale1, opacity1, 0);
-    startRipple(scale2, opacity2, 500);
-    startRipple(scale3, opacity3, 1000);
-  }, []);
+    startRipple(scale1, opacity1);
+    startRipple(scale2, opacity2);
+    startRipple(scale3, opacity3);
+  }, [animate]);
 
-  // Animated styles for ripple effect
   const animatedStyle1 = useAnimatedStyle(() => ({
     transform: [{ scale: scale1.value }],
     opacity: opacity1.value,
@@ -66,16 +69,19 @@ const RippleButton: React.FC<RippleButtonProps> = ({
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.ripple, animatedStyle1]} />
-      <Animated.View style={[styles.ripple, animatedStyle2]} />
-      <Animated.View style={[styles.ripple, animatedStyle3]} />
+      {animate && (
+        <>
+          <Animated.View style={[styles.ripple, animatedStyle1]} />
+          <Animated.View style={[styles.ripple, animatedStyle2]} />
+          <Animated.View style={[styles.ripple, animatedStyle3]} />
+        </>
+      )}
 
-      {/* Mic Button */}
       <TouchableOpacity
-        style={styles.micButton}
+        style={[styles.micButton, { backgroundColor: color || 'green' }]}
         onPress={onPress}
         onLongPress={onLongPress}
-        delayLongPress={500}
+        delayLongPress={500} // Optional: adjust if needed
       >
         <FontAwesome name="microphone" size={40} color="white" />
       </TouchableOpacity>
@@ -95,17 +101,16 @@ const styles = StyleSheet.create({
     width: 125,
     height: 125,
     borderRadius: 75,
-    backgroundColor: 'rgba(34, 139, 34, 0.4)', // Green transparent
+    backgroundColor: 'rgba(34, 139, 34, 0.4)', // Transparent green
   },
   micButton: {
     position: 'absolute',
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5, // Android shadow
+    elevation: 5,
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 3 },
