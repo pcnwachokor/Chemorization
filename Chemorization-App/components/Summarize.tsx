@@ -14,7 +14,7 @@ export async function summarizeText(text: string): Promise<string> {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You summarize text concisely.' },
+          { role: 'system', content: 'You are a helpful assistant that only summarizes *chemistry-related* content. If the content is not about chemistry, respond with "This text does not appear to be related to chemistry."' },
           { role: 'user', content: `Summarize this:\n\n${text}` },
         ],
         max_tokens: 150,
