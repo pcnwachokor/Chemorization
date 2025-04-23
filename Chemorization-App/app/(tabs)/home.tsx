@@ -9,6 +9,7 @@ import * as FileSystem from 'expo-file-system';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
 import { router } from 'expo-router';
+import { cleanQuery } from '@/utils/cleanQuery';
 
 const ASSEMBLY_API_KEY = Constants.expoConfig?.extra?.ASSEMBLY_API_KEY ?? '';
 
@@ -33,6 +34,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 }
 
 const HomeScreen = () => {
+  const [query, setQuery] = useState('');
   const recordingRef = useRef<Recording | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -208,15 +210,34 @@ const HomeScreen = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (!query.trim()) return;
+    const processedQuery = cleanQuery(query);
+    router.push({
+      pathname: '/searchresults',
+      params: { query: processedQuery },
+    });
+  };
+
   return (
+
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for Chemistry Resources</Text>
-        <Ionicons name="volume-high" size={24} color="white" style={styles.speakerIcon} />
+        <Ionicons
+          name="volume-high"
+          size={24}
+          color="white"
+          style={styles.speakerIcon}
+        />
+
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor="#555"
+          value={query}
+          onChangeText={setQuery}
+          onSubmitEditing={handleSearch}
         />
       </View>
 
@@ -279,6 +300,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     padding: 10,
+    color: '#000',
   },
   micContainer: {
     marginTop: 30,
@@ -299,7 +321,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2D7D46',
     marginTop: 5,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
+
   transcriptBox: {
     marginTop: 20,
     padding: 12,
