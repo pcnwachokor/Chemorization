@@ -9,15 +9,7 @@ import * as FileSystem from 'expo-file-system';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
 import { router } from 'expo-router';
-import { useCustomTheme } from '@/app/_layout';
 import { cleanQuery } from '@/utils/cleanQuery';
-
-const HomeScreen = () => {
-  const { mode } = useCustomTheme();
-  const containerBackground = mode === 'dark' ? '#333333' : '#f0f0f0';
-
-  const [query, setQuery] = useState('');
-
 
 const ASSEMBLY_API_KEY = Constants.expoConfig?.extra?.ASSEMBLY_API_KEY ?? '';
 
@@ -42,6 +34,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 }
 
 const HomeScreen = () => {
+  const [query, setQuery] = useState('');
   const recordingRef = useRef<Recording | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -228,7 +221,7 @@ const HomeScreen = () => {
 
   return (
 
-    <View style={[styles.container, { backgroundColor: containerBackground }]}>
+    <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for Chemistry Resources</Text>
         <Ionicons
@@ -283,7 +276,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     backgroundColor: '#2D7D46',
     width: '100%',
-    height: 250,
+    height: 200,
     padding: 50,
     borderRadius: 15,
     position: 'absolute',
