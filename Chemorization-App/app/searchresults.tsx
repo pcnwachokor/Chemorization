@@ -80,7 +80,9 @@ export default function SearchResultsScreen() {
       {!loading && wikiData && (
         <View style={styles.resultBlock}>
           <Text style={styles.header}>Wikipedia Summary:</Text>
-          <Text>{wikiData.extract || 'No summary available'}</Text>
+          <Text>
+            {wikiData.extract || 'No chemistry-related summary available'}
+          </Text>
         </View>
       )}
     </ScrollView>

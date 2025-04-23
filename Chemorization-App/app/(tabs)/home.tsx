@@ -6,6 +6,7 @@ import RippleButton from '@/components/RippleButton';
 import * as Speech from 'expo-speech';
 import { router } from 'expo-router';
 import { useCustomTheme } from '@/app/_layout';
+import { cleanQuery } from '@/utils/cleanQuery';
 
 const HomeScreen = () => {
   const { mode } = useCustomTheme();
@@ -25,9 +26,10 @@ const HomeScreen = () => {
 
   const handleSearch = () => {
     if (!query.trim()) return;
+    const processedQuery = cleanQuery(query);
     router.push({
       pathname: '/searchresults',
-      params: { query: query.trim() },
+      params: { query: processedQuery },
     });
   };
 
