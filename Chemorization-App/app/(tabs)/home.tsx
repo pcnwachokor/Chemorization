@@ -16,8 +16,8 @@ const ASSEMBLY_API_KEY = Constants.expoConfig?.extra?.ASSEMBLY_API_KEY ?? '';
 const speak = (text: string) => {
   Speech.speak(text, {
     language: 'en-US',
-    pitch: 1,
-    rate: 1,
+    pitch: 0.8,
+    rate: 0.95,
   });
 };
 
@@ -141,7 +141,7 @@ const HomeScreen = () => {
         if (data.status === 'completed') {
           completed = true;
           transcriptText = data.text.toLowerCase();
-          transcriptText = transcriptText.replace(/[.,!?]/g, '').trim(); // Clean
+          transcriptText = transcriptText.replace(/[.,!?]/g, '').trim();
           console.log('Transcript:', transcriptText);
           setTranscriptDisplay(transcriptText);
         } else if (data.status === 'error') {
@@ -151,7 +151,6 @@ const HomeScreen = () => {
         }
       }
 
-      // ✅ Voice Routing with Feedback
       if (transcriptText.includes('home')) {
         speak('Opening Home');
         router.push('/home');
@@ -230,7 +229,7 @@ const HomeScreen = () => {
             speak('Opening Assistant');
             router.push('/assistant');
           }}
-          color={isRecording ? 'red' : 'green'}
+          color={isRecording ? '#006400' : 'green'} // ← updated here
         />
         <Text style={styles.transcriptBox}>
           {transcriptDisplay || '🎤 Say something...'}
