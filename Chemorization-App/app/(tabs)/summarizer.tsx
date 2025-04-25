@@ -157,6 +157,7 @@ import {
   View,
   Alert,
 } from 'react-native';
+import MicOverlay from '@/components/MicOverlay';
 import { summarizeText } from '@/components/Summarize'; // Import the summarize function
 
 export default function TabSevenScreen() {
@@ -180,7 +181,8 @@ export default function TabSevenScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Summarizer</Text>
+      <MicOverlay />
+      {/* <Text style={styles.title}>Summarizer</Text> */}
       <TextInput
         style={styles.input}
         placeholder="Enter text to summarize"

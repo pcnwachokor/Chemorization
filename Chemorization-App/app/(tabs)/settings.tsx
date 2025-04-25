@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Switch, TouchableOpacity, View as RNView } from 'react-native';
+import MicOverlay from '@/components/MicOverlay';
 import { Text, View } from '@/components/Themed';
 import { useCustomTheme } from '@/app/_layout';
 
@@ -15,6 +16,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: containerBackground }]}>
+      <MicOverlay />
       <RNView style={[styles.headerContainer, { backgroundColor: headerBackground }]}>
         <Text style={[styles.header, { color: headerTextColor }]}>Appearance</Text>
       </RNView>
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 30,
+    marginTop: 80,
     alignItems: 'center',
   },
   header: {
