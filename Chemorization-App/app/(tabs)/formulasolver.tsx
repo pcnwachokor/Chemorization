@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import MicOverlay from '@/components/MicOverlay';
 import {
   View,
   Text,
@@ -63,6 +64,7 @@ export default function FormulaSolver() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
+        <MicOverlay />
         <View style={styles.separator} />
         <View style={styles.inputContainer}>
           <TextInput
