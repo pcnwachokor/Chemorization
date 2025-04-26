@@ -4,6 +4,7 @@ export default {
   expo: {
     name: 'Chemorization-App',
     slug: 'Chemorization-App',
+    owner: 'pcnwachokor',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
@@ -37,6 +38,9 @@ export default {
     extra: {
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       ASSEMBLY_API_KEY: process.env.ASSEMBLY_API_KEY,
+      eas: {
+        projectId: '802e82bd-d09e-499e-8093-cb221901cdbd',
+      },
     },
   },
 };

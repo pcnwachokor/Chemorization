@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build, Test, and Deploy
 
 on:
   push:
@@ -30,6 +30,9 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm test
 
-      - name: Publish to Expo
+      - name: Publish and Deploy
         working-directory: ./Chemorization-App
-        run: npx expo publish --non-interactive
+        env:
+          CI: true
+        run: |
+          eas update --non-interactive --branch main
