@@ -92,7 +92,8 @@ export default function SearchResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
+    justifyContent: 'center',
     flexGrow: 1,
     backgroundColor: '#fff',
   },

@@ -18,7 +18,7 @@ export const unstable_settings = { initialRouteName: '(tabs)' };
 SplashScreen.preventAutoHideAsync();
 
 interface CustomThemeContextType {
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
   toggleTheme: () => void;
   font: string;
   setFont: (font: string) => void;
@@ -27,11 +27,11 @@ interface CustomThemeContextType {
 }
 
 const CustomThemeContext = createContext<CustomThemeContextType>({
-  mode: "light",
+  mode: 'light',
   toggleTheme: () => {},
-  font: "System",
+  font: 'System',
   setFont: () => {},
-  primaryColor: "#006400",
+  primaryColor: '#006400',
   setPrimaryColor: () => {},
 });
 
@@ -43,11 +43,12 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  const [mode, setMode] = useState<"light" | "dark">("light");
-  const [font, setFont] = useState("System");
-  const [primaryColor, setPrimaryColor] = useState("#006400");
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [font, setFont] = useState('System');
+  const [primaryColor, setPrimaryColor] = useState('#006400');
 
-  const toggleTheme = () => setMode(prev => (prev === "light" ? "dark" : "light"));
+  const toggleTheme = () =>
+    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
 
   useEffect(() => {
     if (error) throw error;
@@ -60,7 +61,16 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <CustomThemeContext.Provider value={{ mode, toggleTheme, font, setFont, primaryColor, setPrimaryColor }}>
+    <CustomThemeContext.Provider
+      value={{
+        mode,
+        toggleTheme,
+        font,
+        setFont,
+        primaryColor,
+        setPrimaryColor,
+      }}
+    >
       <RootLayoutNav />
     </CustomThemeContext.Provider>
   );
@@ -69,7 +79,8 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const { mode, primaryColor } = useCustomTheme();
   const baseTheme = mode === 'dark' ? DarkTheme : DefaultTheme;
-  const customBackground = mode === 'dark' ? '#333333' : baseTheme.colors.background;
+  const customBackground =
+    mode === 'dark' ? '#333333' : baseTheme.colors.background;
 
   const customTheme = {
     ...baseTheme,
@@ -93,16 +104,53 @@ function RootLayoutNav() {
             headerLeft: () => false,
             headerRight: () => (
               <Pressable onPress={() => router.back()}>
-                <Text style={{ color: "#000000", fontSize: 16, marginRight: 15 }}>Cancel</Text>
+                <Text
+                  style={{ color: '#000000', fontSize: 16, marginRight: 15 }}
+                >
+                  Cancel
+                </Text>
               </Pressable>
             ),
           }}
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="assistant" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="assistant"
+          options={{
+            headerTransparent: true,
+            title: '',
+            headerLeft: () => (
+              <Pressable onPress={() => router.back()}>
+                <Text
+                  style={{ color: '#000000', fontSize: 20, marginRight: 15 }}
+                >
+                  Back
+                </Text>
+              </Pressable>
+            ),
+            headerRight: () => false,
+          }}
+        />
         <Stack.Screen name="add" options={{ title: 'Upload Note' }} />
         <Stack.Screen name="view" options={{ title: 'View Notes' }} />
+        <Stack.Screen
+          name="searchresults"
+          options={{
+            headerTransparent: true,
+            title: '',
+            headerLeft: () => (
+              <Pressable onPress={() => router.back()}>
+                <Text
+                  style={{ color: '#000000', fontSize: 20, marginRight: 15 }}
+                >
+                  Back
+                </Text>
+              </Pressable>
+            ),
+            headerRight: () => false,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
