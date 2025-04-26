@@ -48,7 +48,8 @@
     "react-native-svg": "15.8.0",
     "react-native-voice": "^0.3.0",
     "react-native-web": "~0.19.13",
-    "styled-components": "^6.1.15"
+    "styled-components": "^6.1.15",
+    "expo-dev-client": "~5.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
