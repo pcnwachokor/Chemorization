@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
@@ -25,14 +26,16 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm install
 
-      # - name: Lint
-      #   working-directory: ./Chemorization-App
-      #   run: npm run lint
-
       - name: Run unit tests
         working-directory: ./Chemorization-App
         run: npm test
 
-      - name: Build (Optional)
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Authenticate with Expo
+        run: expo login --token $EXPO_TOKEN
+
+      - name: 🚀 Publish to Expo
         working-directory: ./Chemorization-App
-        run: echo "build steps go here"
+        run: expo publish --non-interactive
