@@ -30,12 +30,6 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm test
 
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
-
-      - name: Authenticate with Expo
-        run: expo login --token $EXPO_TOKEN
-
       - name: Publish to Expo
         working-directory: ./Chemorization-App
-        run: expo publish --non-interactive
+        run: npx expo publish --non-interactive
