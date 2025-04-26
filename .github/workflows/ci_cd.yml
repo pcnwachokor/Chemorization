@@ -64,3 +64,10 @@ jobs:
         run: |
           npm install -g eas-cli
           eas update --non-interactive --branch main --message "Automated CI deploy"
+
+      - name: Build Android APK
+        working-directory: ./Chemorization-App
+        env:
+          CI: true
+        run: |
+          eas build --platform android --non-interactive --profile preview
