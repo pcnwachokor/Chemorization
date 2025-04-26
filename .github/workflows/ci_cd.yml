@@ -57,10 +57,10 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm test
 
-      - name: Install EAS CLI and Publish with EAS Update
-        working-directory: ./Chemorization-App
-        env:
-          CI: true
-        run: |
-          npm install -g eas-cli
-          eas update --non-interactive --branch main --message "Automated CI deploy"
+      # - name: Install EAS CLI and Publish with EAS Update
+      #   working-directory: ./Chemorization-App
+      #   env:
+      #     CI: true
+      #   run: |
+      #     npm install -g eas-cli
+      #     eas update --non-interactive --branch main --message "Automated CI deploy"
