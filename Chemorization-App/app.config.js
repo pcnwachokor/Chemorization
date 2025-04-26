@@ -18,9 +18,10 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.anonymous.Chemorization-App',
+      bundleIdentifier: 'com.pcnwachokor.chemorizationapp',
     },
     android: {
+      package: 'com.pcnwachokor.chemorizationapp',
       adaptiveIcon: {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',
