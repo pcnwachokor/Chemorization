@@ -1,28 +1,22 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useVoiceCommand } from './useVoiceCommand';
-import * as Speech from 'expo-speech';
+import { useCustomTheme } from '@/app/_layout';
+import { speak } from '@/utils/speak';
 import { router } from 'expo-router';
 
 export default function MicOverlay() {
   const { isRecording, startRecording } = useVoiceCommand();
+  const { voice } = useCustomTheme();
 
   return (
     <TouchableOpacity
-      style={[
-        styles.pill,
-        isRecording && { opacity: 0.6 },        // visual feedback when recording
-      ]}
+      style={[styles.pill, isRecording && styles.pillActive]}
       activeOpacity={0.8}
       onPress={startRecording}
       onLongPress={() => {
-        Speech.speak('Opening Assistant');
+        speak('Opening Assistant', voice);
         router.push('/assistant');
       }}
     >
@@ -40,8 +34,8 @@ export default function MicOverlay() {
 const styles = StyleSheet.create({
   pill: {
     position: 'absolute',
-    top: 10,                // adjust vertical offset as needed
-    left: '5%',
+    top: 10,
+    alignSelf: 'center',
     width: '90%',
     height: 50,
     borderRadius: 25,
@@ -50,6 +44,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 999,
+  },
+  pillActive: {
+    opacity: 0.6,
   },
   icon: {
     position: 'absolute',

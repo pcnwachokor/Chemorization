@@ -182,7 +182,7 @@ export default function TabSevenScreen() {
   return (
     <View style={styles.container}>
       <MicOverlay />
-      {/* <Text style={styles.title}>Summarizer</Text> */}
+      <Text style={styles.title}>Summarizer</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter text to summarize"
@@ -208,7 +208,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 0,
   },
   title: {
     fontSize: 20,
