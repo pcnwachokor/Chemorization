@@ -36,6 +36,6 @@ jobs:
       - name: Authenticate with Expo
         run: expo login --token $EXPO_TOKEN
 
-      - name: 🚀 Publish to Expo
+      - name: Publish to Expo
         working-directory: ./Chemorization-App
         run: expo publish --non-interactive
