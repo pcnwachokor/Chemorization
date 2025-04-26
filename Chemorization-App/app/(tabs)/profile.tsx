@@ -73,14 +73,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    padding: 20,
+    justifyContent: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 0,
   },
   headerContainer: {
     width: '100%',
     padding: 15,
     borderRadius: 10,
     marginBottom: 30,
-    marginTop: 80,
+    marginTop: -50,
     alignItems: 'center',
   },
   header: {

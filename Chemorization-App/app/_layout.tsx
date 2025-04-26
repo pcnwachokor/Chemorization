@@ -24,6 +24,8 @@ interface CustomThemeContextType {
   setFont: (font: string) => void;
   primaryColor: string;
   setPrimaryColor: (color: string) => void;
+  voice: "default" | "uk";            // add
+  setVoice: (voice: "default" | "uk") => void;   // add
 }
 
 const CustomThemeContext = createContext<CustomThemeContextType>({
@@ -33,6 +35,8 @@ const CustomThemeContext = createContext<CustomThemeContextType>({
   setFont: () => {},
   primaryColor: "#006400",
   setPrimaryColor: () => {},
+  voice: "default",         // add
+  setVoice: () => {},       // add
 });
 
 export const useCustomTheme = () => useContext(CustomThemeContext);
@@ -46,6 +50,7 @@ export default function RootLayout() {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [font, setFont] = useState("System");
   const [primaryColor, setPrimaryColor] = useState("#006400");
+  const [voice, setVoice] = useState<"default" | "uk">("default");    // move here!
 
   const toggleTheme = () => setMode(prev => (prev === "light" ? "dark" : "light"));
 
@@ -60,7 +65,16 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <CustomThemeContext.Provider value={{ mode, toggleTheme, font, setFont, primaryColor, setPrimaryColor }}>
+    <CustomThemeContext.Provider value={{
+      mode,
+      toggleTheme,
+      font,
+      setFont,
+      primaryColor,
+      setPrimaryColor,
+      voice,
+      setVoice,         // <-- you forgot to pass it!
+    }}>
       <RootLayoutNav />
     </CustomThemeContext.Provider>
   );
