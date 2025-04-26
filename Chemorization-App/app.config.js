@@ -35,6 +35,12 @@ export default {
     experiments: {
       typedRoutes: true,
     },
+    updates: {
+      url: 'https://u.expo.dev/802e82bd-d09e-499e-8093-cb221901cdbd',
+    },
+    runtimeVersion: {
+      policy: 'appVersion',
+    },
     extra: {
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       ASSEMBLY_API_KEY: process.env.ASSEMBLY_API_KEY,
