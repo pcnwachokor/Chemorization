@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 export default {
   expo: {
     name: 'Chemorization-App',
@@ -18,7 +16,7 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.pcnwachokor.chemorizationapp',
+      bundleIdentifier: 'com.anonymous.Chemorization-App',
     },
     android: {
       package: 'com.pcnwachokor.chemorizationapp',
@@ -26,6 +24,21 @@ export default {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',
       },
+      intentFilters: [], // (safe empty)
+      permissions: [], // (safe empty)
+      config: {
+        googleServicesFile: './google-services.json',
+      },
+      // 👇 **Add THIS:**
+      androidManifest: [
+        {
+          application: {
+            'tools:replace': 'android:appComponentFactory',
+            'android:appComponentFactory':
+              'androidx.core.app.CoreComponentFactory',
+          },
+        },
+      ],
     },
     web: {
       bundler: 'metro',
