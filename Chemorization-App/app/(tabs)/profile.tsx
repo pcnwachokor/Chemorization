@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import MicOverlay from '@/components/MicOverlay';
 import { StyleSheet, TouchableOpacity, View as RNView } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getAuth } from 'firebase/auth';
@@ -26,6 +27,7 @@ export default function TabFiveScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: containerBackground }]}>
+      <MicOverlay />
       <RNView
         style={[styles.headerContainer, { backgroundColor: headerBackground }]}
       >
@@ -72,13 +74,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 0,
   },
   headerContainer: {
     width: '100%',
     padding: 15,
     borderRadius: 10,
     marginBottom: 30,
+    marginTop: -50,
     alignItems: 'center',
   },
   header: {
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 5,
   },
   buttonText: {
     color: '#fff',
