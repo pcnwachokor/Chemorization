@@ -8,7 +8,7 @@ export const searchPubChemCompound = async (compoundName: string) => {
     );
     return response.data;
   } catch (error) {
-    console.error('PubChem API Error:', error);
+    console.log('PubChem API Error:', error);
     return null;
   }
 };
