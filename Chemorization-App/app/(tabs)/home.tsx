@@ -119,14 +119,17 @@ const HomeScreen = () => {
 
       const { upload_url } = await uploadRes.json();
 
-      const transcriptRes = await fetch('https://api.assemblyai.com/v2/transcript', {
-        method: 'POST',
-        headers: {
-          authorization: ASSEMBLY_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ audio_url: upload_url }),
-      });
+      const transcriptRes = await fetch(
+        'https://api.assemblyai.com/v2/transcript',
+        {
+          method: 'POST',
+          headers: {
+            authorization: ASSEMBLY_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ audio_url: upload_url }),
+        }
+      );
 
       const { id } = await transcriptRes.json();
 
@@ -134,9 +137,12 @@ const HomeScreen = () => {
       let transcriptText = '';
 
       while (!completed) {
-        const pollingRes = await fetch(`https://api.assemblyai.com/v2/transcript/${id}`, {
-          headers: { authorization: ASSEMBLY_API_KEY },
-        });
+        const pollingRes = await fetch(
+          `https://api.assemblyai.com/v2/transcript/${id}`,
+          {
+            headers: { authorization: ASSEMBLY_API_KEY },
+          }
+        );
 
         const data = await pollingRes.json();
 
@@ -220,7 +226,6 @@ const HomeScreen = () => {
   };
 
   return (
-
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for Chemistry Resources</Text>
@@ -250,10 +255,10 @@ const HomeScreen = () => {
             speak('Opening Assistant');
             router.push('/assistant');
           }}
-          color={isRecording ? '#006400' : 'green'} // ← updated here
+          color={isRecording ? '#006400' : 'green'} //
         />
         <Text style={styles.transcriptBox}>
-          {transcriptDisplay || '🎤 Say something...'}
+          {transcriptDisplay || 'Tap to Navigate...'}
         </Text>
       </View>
 
@@ -331,7 +336,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     fontSize: 16,
-    color: '#333',
+    color: '#2D7D46',
     maxWidth: '90%',
     textAlign: 'center',
     minHeight: 50,
