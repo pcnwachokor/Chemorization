@@ -56,9 +56,3 @@ jobs:
       - name: Run unit tests
         working-directory: ./Chemorization-App
         run: npm test
-
-      - name: Publish to Expo (via EAS Update)
-        working-directory: ./Chemorization-App
-        run: |
-          npm install -g eas-cli
-          eas update --branch main --message "CI Auto Publish" --non-interactive
