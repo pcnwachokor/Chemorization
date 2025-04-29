@@ -1,6 +1,7 @@
 import { Text, View } from '@/components/Themed';
 import { FontAwesome } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import MicOverlay from '@/components/MicOverlay';
 import {
   TextInput,
   TouchableOpacity,
@@ -44,6 +45,7 @@ export default function BrailleTranslation() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
+        <MicOverlay />
         <View style={styles.separator} />
         <View style={styles.inputContainer}>
           <TextInput

@@ -6,6 +6,7 @@ import {
   StyleSheet,
  // Alert,
 } from 'react-native';
+import MicOverlay from '@/components/MicOverlay';
 //import * as DocumentPicker from 'expo-document-picker';
 import { FontAwesome } from '@expo/vector-icons';
 //import { collection, addDoc } from 'firebase/firestore';
@@ -19,6 +20,7 @@ export default function NotesHomeScreen() {
 
   return (
     <View style={styles.container}>
+      <MicOverlay />
       <Text style={styles.title}>My Notes</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => router.push('/add')}>
@@ -39,7 +41,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 0,
   },
   title: {
     fontSize: 28,

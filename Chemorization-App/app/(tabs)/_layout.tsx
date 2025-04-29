@@ -104,6 +104,7 @@ export default function TabLayout() {
         name="summarizer"
         options={{
           title: 'Summarizer',
+          headerShown: true,
           tabBarIcon: ({ color }) => <TabBarIcon name="file" color={color} />,
         }}
       />
