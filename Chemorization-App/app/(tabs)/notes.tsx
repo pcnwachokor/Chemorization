@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import * as Speech from 'expo-speech';
 import MicOverlay from '@/components/MicOverlay';
 
 const chemistryFacts = [
@@ -14,7 +10,7 @@ const chemistryFacts = [
   "The periodic table has 118 elements.",
   "Hydrogen is the most abundant element in the universe.",
   "Mercury is the only metal that's liquid at room temperature.",
-  "A mole of any substance contains 6.022 × 10²³ particles.",
+  "A mole of any substance contains 6.022 * 10²³ particles.",
   "Carbon can form more compounds than any other element.",
   "Salt (NaCl) is made from sodium and chlorine.",
   "Helium is lighter than air and non-flammable.",
@@ -25,7 +21,7 @@ const chemistryFacts = [
   "The only letter missing from the periodic table is J.",
   "Enzymes are biological catalysts.",
   "Rust forms when iron reacts with oxygen and water.",
-  "Avogadro's number is 6.022 × 10²³.",
+  "Avogadro's number is 6.022 * 10²³.",
   "Lipids are hydrophobic — they repel water.",
   "The nucleus contains protons and neutrons.",
   "Alloys are mixtures of two or more metals.",
@@ -74,33 +70,44 @@ export default function NotesHomeScreen() {
     setCurrentFact(getRandomFact());
   };
 
+  const speakFact = () => {
+    Speech.speak(currentFact, {
+      language: 'en-US',
+      rate: 0.8,
+      pitch: 1.1,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <MicOverlay />
-      
-      {/* All content moved down */}
-      <View style={styles.content}>
-        <Text style={styles.title}>My Notes</Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/add')}>
-          <FontAwesome name="plus-circle" size={30} color="white" />
-          <Text style={styles.buttonText}>Add New Note</Text>
+      {/* Spacer to push things lower */}
+      <View style={styles.spacer} />
+
+      <Text style={styles.title}>My Notes</Text>
+
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/add')}>
+        <FontAwesome name="plus-circle" size={30} color="white" />
+        <Text style={styles.buttonText}>Add New Note</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/view')}>
+        <FontAwesome name="folder-open" size={30} color="white" />
+        <Text style={styles.buttonText}>View Notes</Text>
+      </TouchableOpacity>
+
+      <View style={styles.tipContainer}>
+        <Text style={styles.tipHeader}>🧪 Chemistry Fact of the Day</Text>
+        <Text style={styles.tip}>{currentFact}</Text>
+
+        <TouchableOpacity style={styles.refreshButton} onPress={refreshFact}>
+          <Text style={styles.refreshText}>🔁 Refresh Fact</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/view')}>
-          <FontAwesome name="folder-open" size={30} color="white" />
-          <Text style={styles.buttonText}>View Notes</Text>
+        <TouchableOpacity style={styles.bigSpeakButton} onPress={speakFact}>
+          <Text style={styles.bigSpeakText}>🔊 Speak Fact</Text>
         </TouchableOpacity>
-
-        {/* Chemistry Fact Section */}
-        <View style={styles.tipContainer}>
-          <Text style={styles.tipHeader}>🧪 Chemistry Fact of the Day</Text>
-          <Text style={styles.tip}>{currentFact}</Text>
-
-          <TouchableOpacity style={styles.refreshButton} onPress={refreshFact}>
-            <Text style={styles.refreshText}>🔁 Refresh Fact</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -109,17 +116,18 @@ export default function NotesHomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingVertical: 20,
     backgroundColor: '#fff',
-  },
-  content: {
-    marginTop: 120, // Push all the content down
     alignItems: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'flex-start',
+  },
+  spacer: {
+    height: 120, // pushes all content lower down
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   button: {
     flexDirection: 'row',
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   tipContainer: {
-    marginTop: 40,
+    marginTop: 50,
     backgroundColor: '#e0f7fa',
     borderLeftWidth: 5,
     borderLeftColor: '#00796b',
@@ -166,6 +174,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#00796b',
   },
+  bigSpeakButton: {
+    marginTop: 15,
+    backgroundColor: '#2D7D46',
+    paddingVertical: 18,
+    paddingHorizontal: 50,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigSpeakText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
 });
+
+
 
 
