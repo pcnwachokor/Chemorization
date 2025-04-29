@@ -146,8 +146,6 @@
 // });
 
 
-
-
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -156,7 +154,10 @@ import {
   Text,
   View,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import * as Speech from 'expo-speech'; // Import expo-speech for TTS
 import MicOverlay from '@/components/MicOverlay';
 import { summarizeText } from '@/components/Summarize'; // Import the summarize function
 
@@ -170,9 +171,19 @@ export default function TabSevenScreen() {
       return;
     }
 
+    // Dismiss the keyboard when the button is pressed
+    Keyboard.dismiss();
+
     try {
       const result = await summarizeText(text); // Call the summarizeText function
       setSummary(result); // Update the summary state
+
+      // Use TTS to read the summary aloud
+      Speech.speak(result, {
+        language: 'en-US',
+        pitch: 1.0,
+        rate: 0.9,
+      });
     } catch (error) {
       console.error('Error summarizing text:', error);
       Alert.alert('Error', 'Failed to summarize the text.');
@@ -180,26 +191,29 @@ export default function TabSevenScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <MicOverlay />
-      <Text style={styles.title}>Summarizer</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter text to summarize"
-        value={text}
-        onChangeText={setText}
-        multiline
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSummarize}>
-        <Text style={styles.buttonText}>Summarize</Text>
-      </TouchableOpacity>
-      {summary ? (
-        <View style={styles.summaryContainer}>
-          <Text style={styles.summaryTitle}>Summary:</Text>
-          <Text style={styles.summaryText}>{summary}</Text>
-        </View>
-      ) : null}
-    </View>
+    // Wrap the entire screen in TouchableWithoutFeedback to dismiss the keyboard when tapping outside
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <MicOverlay />
+        <Text style={styles.title}>Summarizer</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter text to summarize"
+          value={text}
+          onChangeText={setText}
+          multiline
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSummarize}>
+          <Text style={styles.buttonText}>Summarize</Text>
+        </TouchableOpacity>
+        {summary ? (
+          <View style={styles.summaryContainer}>
+            <Text style={styles.summaryTitle}>Summary:</Text>
+            <Text style={styles.summaryText}>{summary}</Text>
+          </View>
+        ) : null}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -254,4 +268,3 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 });
-
