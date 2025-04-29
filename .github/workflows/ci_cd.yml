@@ -59,8 +59,6 @@ jobs:
 
       - name: Publish to Expo (via EAS Update)
         working-directory: ./Chemorization-App
-        env:
-          EAS_UPDATE_MESSAGE: "Automated CI publish"
         run: |
           npm install -g eas-cli
-          eas update --branch main --non-interactive
+          eas update --branch main --message "CI Auto Publish" --non-interactive
