@@ -1,4 +1,4 @@
-name: Build, Test, and Deploy
+name: Test and Publish to Expo Go
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test-and-publish:
     runs-on: ubuntu-latest
 
     env:
@@ -57,10 +57,6 @@ jobs:
         working-directory: ./Chemorization-App
         run: npm test
 
-      # - name: Install EAS CLI and Publish with EAS Update
-      #   working-directory: ./Chemorization-App
-      #   env:
-      #     CI: true
-      #   run: |
-      #     npm install -g eas-cli
-      #     eas update --non-interactive --branch main --message "Automated CI deploy"
+      - name: Publish to Expo
+        working-directory: ./Chemorization-App
+        run: npx expo publish --non-interactive
