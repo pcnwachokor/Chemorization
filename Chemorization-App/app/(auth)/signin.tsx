@@ -13,10 +13,14 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { router } from 'expo-router';
+import { Picker } from '@react-native-picker/picker';
+import { db } from '../../FirebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Student');
 
   const signIn = async () => {
     try {
@@ -30,8 +34,17 @@ const SignInScreen = () => {
 
   const signUp = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      if (user) router.replace('/(tabs)/home');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email: user.email,
+        role: role,
+        createdAt: new Date(),
+      });
+
+      router.replace('/(tabs)/home');
     } catch (error: any) {
       console.log(error);
       Alert.alert('Sign Up Failed');
@@ -59,6 +72,17 @@ const SignInScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
+
+      <Picker
+        selectedValue={role}
+        onValueChange={(itemValue) => setRole(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Student" value="Student" />
+        <Picker.Item label="Teacher" value="Teacher" />
+        <Picker.Item label="Chemist" value="Chemist" />
+      </Picker>
+
       <TouchableOpacity style={styles.button} onPress={signIn}>
         <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
@@ -68,7 +92,7 @@ const SignInScreen = () => {
       >
         <Text style={[styles.buttonText, { color: 'black' }]}>Sign Up</Text>
       </TouchableOpacity>
-      {/* Will flesh out logic for forgot password */}
+
       <TouchableOpacity>
         <Text style={styles.text}>Forgot Password?</Text>
       </TouchableOpacity>
@@ -106,18 +130,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     color: '#000000',
   },
+  picker: {
+    width: '90%',
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#f9f9f9',
+  },
   button: {
     width: '80%',
     backgroundColor: 'green',
-    padding: 7,
+    padding: 10,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
   signUpButton: {
     backgroundColor: 'white',
-    outline: 'yes',
-    outlineColor: 'green',
+    borderWidth: 2,
+    borderColor: 'green',
   },
   buttonText: {
     color: '#FFFFFF',
@@ -128,18 +159,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'green',
     marginTop: 10,
-    marginRight: 200,
     textAlign: 'right',
   },
   outlinedText: {
     fontSize: 18,
     fontWeight: 'bold',
-    borderWidth: 0.2, // Thickness of the outline
-    borderColor: 'black', // Outline color
-    backgroundColor: 'white', // Background color inside the border
-  },
-  icon: {
-    marginBottom: 20,
+    borderWidth: 0.2,
+    borderColor: 'black',
+    backgroundColor: 'white',
   },
 });
 
